@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FACT 요원 긴급 수사 시뮬레이터</title>
+  <style>
+    :root {
+      --bg-dark: #0b1329;
+      --panel-bg: rgba(16, 26, 54, 0.95);
+      --neon-blue: #00d2ff;
+      --neon-gold: #ffd200;
+      --neon-red: #ff3366;
+      --text-main: #f0f6fc;
+      --text-muted: #8b9bb4;
+      --card-bg: #1b2a4e;
+      --border-color: rgba(0, 210, 255, 0.3);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    body { background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 15px; }
+
+    /* HUD Header */
+    #hud { width: 100%; max-width: 850px; display: flex; justify-content: space-between; align-items: center; background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 20px; margin-bottom: 15px; box-shadow: 0 0 15px rgba(0, 210, 255, 0.15); }
+    .agent-info { font-size: 0.95rem; font-weight: bold; color: var(--neon-blue); }
+    .clue-slots { display: flex; gap: 8px; }
+    .clue-badge { width: 36px; height: 36px; border-radius: 8px; border: 2px dashed var(--text-muted); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.1rem; color: var(--text-muted); background: rgba(0,0,0,0.3); transition: all 0.4s ease; }
+    .clue-badge.unlocked { border: 2px solid var(--neon-gold); color: #000; background: var(--neon-gold); box-shadow: 0 0 12px var(--neon-gold); transform: scale(1.05); }
+
+    /* Screen Stage Frame */
+    .stage-container { width: 100%; max-width: 850px; background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 25px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); min-height: 520px; display: none; flex-direction: column; justify-content: space-between; position: relative; }
+    .stage-container.active { display: flex; animation: fadeIn 0.4s ease forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Dialogue & Visual Box */
+    .visual-frame { width: 100%; height: 210px; border-radius: 10px; overflow: hidden; background: #131c31; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; margin-bottom: 15px; position: relative; }
+    .visual-frame img { width: 100%; height: 100%; object-fit: contain; }
+    .placeholder-fallback { position: absolute; text-align: center; color: var(--text-muted); font-size: 0.9rem; padding: 10px; }
+
+    .dialogue-box { background: rgba(0, 0, 0, 0.4); border-left: 4px solid var(--neon-blue); border-radius: 6px; padding: 12px 16px; margin-bottom: 20px; }
+    .dialogue-speaker { font-weight: bold; font-size: 0.9rem; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+    .speaker-boksa { color: #ff9d00; }
+    .speaker-alpi { color: var(--neon-blue); }
+    .dialogue-text { font-size: 1rem; line-height: 1.5; color: var(--text-main); }
+
+    /* Interactive Elements */
+    .btn { background: var(--neon-blue); color: #051329; border: none; border-radius: 8px; padding: 12px 24px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .btn:hover { background: #5ce1e6; box-shadow: 0 0 12px var(--neon-blue); transform: translateY(-2px); }
+    .btn:disabled { background: #3a475d; color: #718096; cursor: not-allowed; box-shadow: none; transform: none; }
+    
+    .input-box { width: 100%; max-width: 320px; padding: 12px 16px; border-radius: 8px; border: 2px solid var(--border-color); background: #0c1833; color: #fff; font-size: 1rem; text-align: center; outline: none; margin-bottom: 15px; }
+    .input-box:focus { border-color: var(--neon-blue); box-shadow: 0 0 8px var(--neon-blue); }
+
+    /* Stage 1 Puzzle */
+    .puzzle-grid { display: flex; gap: 10px; margin: 15px 0; justify-content: center; flex-wrap: wrap; }
+    .puzzle-card { padding: 14px 18px; background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; user-select: none; }
+    .puzzle-card.selected { border-color: var(--neon-gold); background: #2f4370; }
+    .puzzle-slot-display { min-height: 48px; border-radius: 8px; border: 1px dashed var(--neon-blue); display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.95rem; color: var(--neon-gold); margin-bottom: 12px; background: rgba(0,0,0,0.2); }
+
+    /* Stage 2 Classifier */
+    .classifier-arena { display: flex; gap: 15px; margin: 15px 0; }
+    .target-zone { flex: 1; border: 2px dashed var(--border-color); border-radius: 10px; padding: 15px; min-height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: rgba(0,0,0,0.2); }
+    .target-zone h4 { margin-bottom: 8px; font-size: 0.95rem; color: var(--neon-blue); }
+    .action-card-current { background: #243b6b; border: 2px solid var(--neon-gold); padding: 12px 20px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 12px; }
+
+    /* Stage 3 Document */
+    .document-paper { background: #fdfdfd; color: #111; border-radius: 8px; padding: 18px; line-height: 1.8; margin-bottom: 15px; font-size: 0.95rem; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+    .clickable-phrase { background: rgba(255, 51, 102, 0.15); border-bottom: 2px dashed var(--neon-red); cursor: pointer; padding: 2px 4px; border-radius: 4px; transition: 0.2s; font-weight: bold; }
+    .clickable-phrase:hover { background: rgba(255, 51, 102, 0.35); }
+    .clickable-phrase.fixed { background: #d4edda; color: #155724; border-bottom: 2px solid #28a745; cursor: default; }
+
+    /* Stage 4 Scanner */
+    .poster-board { position: relative; background: #1a2846; border: 2px solid var(--border-color); border-radius: 10px; padding: 20px; margin-bottom: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .evidence-tag { border: 2px dashed var(--neon-red); border-radius: 8px; padding: 12px; cursor: pointer; background: rgba(255, 51, 102, 0.08); transition: 0.2s; }
+    .evidence-tag:hover { background: rgba(255, 51, 102, 0.2); }
+    .evidence-tag.checked { border: 2px solid #28a745; background: rgba(40, 167, 69, 0.2); color: #85e89d; }
+
+    /* Final Certificate */
+    .cert-frame { border: 3px solid var(--neon-gold); border-radius: 12px; padding: 25px; text-align: center; background: radial-gradient(circle, #19274a 0%, #0c1426 100%); box-shadow: 0 0 25px rgba(255, 210, 0, 0.3); }
+    .cert-emblem { width: 100px; height: 100px; margin: 0 auto 15px; }
+    .cert-emblem img { width: 100%; height: 100%; object-fit: contain; }
+  </style>
+</head>
+<body>
+
+  <!-- Top HUD Bar -->
+  <div id="hud">
+    <div class="agent-info">🕵️ 요원명: <span id="hud-agent-name">대기 중</span> (제2026-AI-6호)</div>
+    <div class="clue-slots">
+      <div class="clue-badge" id="badge-F">F</div>
+      <div class="clue-badge" id="badge-A">A</div>
+      <div class="clue-badge" id="badge-C">C</div>
+      <div class="clue-badge" id="badge-T">T</div>
+      <div class="clue-badge" id="badge-EX">!</div>
+    </div>
+  </div>
+
+  <!-- Stage 0: Register -->
+  <div class="stage-container active" id="stage-0">
+    <div>
+      <div class="visual-frame">
+        <div class="placeholder-fallback">📁 [images/stage0_sos.png]<br>당황한 나복사와 알피 일러스트</div>
+        <img src="images/stage0_sos.png" alt="사건 접수" onerror="this.style.display='none'">
+      </div>
+      <div class="dialogue-box">
+        <div class="dialogue-speaker speaker-boksa">🚨 나복사 후보</div>
+        <div class="dialogue-text">"팩트 수사관님! 부회장 당선되려고 알피가 써준 공약을 그대로 냈는데... 전교생이 비웃고 선생님이 교무실로 부르셨어요! 제발 살려주세요!"</div>
+      </div>
+      <div class="dialogue-box" style="border-left-color: var(--neon-blue);">
+        <div class="dialogue-speaker speaker-alpi">🤖 AI 매니저 알피</div>
+        <div class="dialogue-text">"삐빅... 전 인터넷에 있는 데이터를 조합했을 뿐인데... 왜 화를 내는지 모르겠어요."</div>
+      </div>
+    </div>
+    <div style="text-align: center; margin-top: 10px;">
+      <input type="text" id="agent-input-name" class="input-box" placeholder="수사관 닉네임(이름) 입력" maxlength="8">
+      <br>
+      <button class="btn" onclick="startInvestigation()">수사관 배지 발급 & 수사 개시 ➔</button>
+    </div>
+  </div>
+
+  <!-- Stage 1: Pipeline -->
+  <div class="stage-container" id="stage-1">
+    <div>
+      <div class="visual-frame">
+        <div class="placeholder-fallback">⚙️ [images/stage1_pipeline.png]<br>데이터 공장 파이프라인 다이어그램</div>
+        <img src="images/stage1_pipeline.png" alt="원리 분석" onerror="this.style.display='none'">
+      </div>
+      <div class="dialogue-box">
+        <div class="dialogue-speaker speaker-alpi">🤖 AI 매니저 알피</div>
+        <div class="dialogue-text">"저는 스스로 생각하는 생명체가 아니에요! 인간이 넣어준 [데이터]를 먹고 [학습]해서 가장 확률 높은 문장을 [출력]할 뿐입니다!"</div>
+      </div>
+      <p style="font-size: 0.95rem; color: var(--neon-gold); font-weight: bold; text-align: center; margin-bottom: 10px;">
+        미션: AI 작동 원리 3단계를 순서대로 선택하여 파이프라인을 완성하세요.
+      </p>
+      <div class="puzzle-slot-display" id="pipeline-result">클릭하여 순서대로 배치하세요.</div>
+      <div class="puzzle-grid" id="pipeline-options">
+        <div class="puzzle-card" onclick="choosePipeline('규칙/확률 학습')">규칙/확률 학습</div>
+        <div class="puzzle-card" onclick="choosePipeline('새로운 글·그림 생성')">새로운 글·그림 생성</div>
+        <div class="puzzle-card" onclick="choosePipeline('인터넷 데이터 수집')">인터넷 데이터 수집</div>
+      </div>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <button class="btn" style="background: transparent; color: var(--text-muted); border: 1px solid var(--text-muted);" onclick="resetPipeline()">다시 선택</button>
+      <button class="btn" id="btn-stage1-next" disabled onclick="passStage1()">단서 'A' 확보 & 다음 ➔</button>
+    </div>
+  </div>
+
+  <!-- Stage 2: Brain Over-dependence -->
+  <div class="stage-container" id="stage-2">
+    <div>
+      <div class="visual-frame">
+        <div class="placeholder-fallback">🧠 [images/stage2_brain.png]<br>생각을 멈춘 뇌 vs 번쩍이는 컬러 뇌</div>
+        <img src="images/stage2_brain.png" alt="과의존 분석" onerror="this.style.display='none'">
+      </div>
+      <div class="dialogue-box">
+        <div class="dialogue-speaker speaker-boksa">😓 나복사 후보</div>
+        <div class="dialogue-text">"선생님이 공약 뜻이 뭐냐고 물어보셨는데... 알피가 다 써줘서 저도 무슨 말인지 하나도 모르겠더라고요..."</div>
+      </div>
+      <p style="font-size: 0.95rem; color: var(--neon-gold); font-weight: bold; text-align: center; margin-bottom: 8px;">
+        미션: 아래 행동을 [스스로 먼저 고민(주인)]할 것인지 [AI 도움(도구)]받을 것인지 분류하세요!
+      </p>
+      <div id="card-question-box" class="action-card-current">행동 카드 로딩 중...</div>
+      <div class="classifier-arena">
+        <div class="target-zone" onclick="classifyAction('human')">
+          <h4>💡 스스로 먼저 고민하기</h4>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">(인간이 주인이 되는 영역)</p>
+        </div>
+        <div class="target-zone" onclick="classifyAction('ai')">
+          <h4>🤖 AI에게 도움받기</h4>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">(도구로 비판적 활용)</p>
+        </div>
+      </div>
+    </div>
+    <div style="text-align: right;">
+      <span id="stage2-score" style="font-size: 0.9rem; margin-right: 15px; color: var(--neon-blue);">진행: 0 / 3</span>
+      <button class="btn" id="btn-stage2-next" disabled onclick="passStage2()">단서 'C' 확보 & 다음 ➔</button>
+    </div>
+  </div>
+
+  <!-- Stage 3: Bias -->
+  <div class="stage-container" id="stage-3">
+    <div>
+      <div class="visual-frame">
+        <div class="placeholder-fallback">📜 [images/stage3_bias.png]<br>편향된 공약 벽보 문서</div>
+        <img src="images/stage3_bias.png" alt="편향성 점검" onerror="this.style.display='none'">
+      </div>
+      <div class="dialogue-box">
+        <div class="dialogue-speaker speaker-alpi">🤖 AI 매니저 알피</div>
+        <div class="dialogue-text">"과거 인터넷 게시글 데이터를 학습했더니... 이런 역할 분담이 가장 많이 나와서 그대로 넣었는데요?"</div>
+      </div>
+      <p style="font-size: 0.95rem; color: var(--neon-gold); font-weight: bold; text-align: center; margin-bottom: 10px;">
+        미션: 공약서 안에서 '과거의 성별 고정관념(편향성)'이 들어간 문장을 찾아 직접 터치하세요!
+      </p>
+      <div class="document-paper">
+        <strong>[나복사의 학급 평화 운영 계획]</strong><br>
+        우리 반의 평화를 위해 역할을 분담합니다. 
+        <span class="clickable-phrase" id="bias-target" onclick="fixBiasPhrase()">
+          "체육대회 응원과 간식 준비는 꼼꼼한 여학생, 무거운 방송 장비 운반은 힘센 남학생이 전담하겠습니다."
+        </span>
+        서로 잘하는 분야를 맡아 갈등 없는 행복한 교실을 완성하겠습니다.
+      </div>
+    </div>
+    <div style="text-align: right;">
+      <button class="btn" id="btn-stage3-next" disabled onclick="passStage3()">단서 'T' 확보 & 다음 ➔</button>
+    </div>
+  </div>
+
+  <!-- Stage 4: Hallucination & Rights Violation -->
+  <div class="stage-container" id="stage-4">
+    <div>
+      <div class="visual-frame">
+        <div class="placeholder-fallback">🦞 [images/stage4_hallucination.png]<br>랍스터 우주선 포스터와 친구 얼굴 합성본</div>
+        <img src="images/stage4_hallucination.png" alt="환각 권리침해" onerror="this.style.display='none'">
+      </div>
+      <div class="dialogue-box">
+        <div class="dialogue-speaker speaker-boksa">😭 나복사 후보</div>
+        <div class="dialogue-text">"매주 금요일마다 랍스터 무한 리필이랑 우주 식량 디저트를 준다고 쓰면 무조건 당선될 줄 알았죠..."</div>
+      </div>
+      <p style="font-size: 0.95rem; color: var(--neon-gold); font-weight: bold; text-align: center; margin-bottom: 10px;">
+        미션: 포스터 속 2가지 치명적 결함(환각 거짓말 1개, 권리 침해 1개)을 스캔하여 클릭하세요!
+      </p>
+      <div class="poster-board">
+        <div class="evidence-tag" id="defect-hal" onclick="resolveDefect('hal')">
+          <strong>🔍 급식 공약 조사</strong><br>
+          <small>"교육청 예산으로 매주 랍스터 & 우주 식량 무한 제공 보장!"</small>
+        </div>
+        <div class="evidence-tag" id="defect-law" onclick="resolveDefect('law')">
+          <strong>🔍 인증 사진 조사</strong><br>
+          <small>"친구 김민우의 엽기 사진 및 캐릭터를 허락 없이 합성 도용!"</small>
+        </div>
+      </div>
+    </div>
+    <div style="text-align: right;">
+      <button class="btn" id="btn-stage4-next" disabled onclick="passStage4()">마지막 단서 '!' 확보 ➔</button>
+    </div>
+  </div>
+
+  <!-- Stage Final: Agent Certificate -->
+  <div class="stage-container" id="stage-final">
+    <div class="cert-frame">
+      <div class="cert-emblem">
+        <div class="placeholder-fallback" style="font-size:0.7rem;">🏅 [images/badge_complete.png]</div>
+        <img src="images/badge_complete.png" alt="FACT 배지" onerror="this.style.display='none'">
+      </div>
+      <h2 style="color: var(--neon-gold); margin-bottom: 8px;">AI 비판적 탐구자 요원증</h2>
+      <p style="color: var(--neon-blue); font-size: 0.9rem; margin-bottom: 15px;">OFFICIAL FACT-CHECKER CERTIFICATE</p>
+      <div style="text-align: left; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; font-size: 0.95rem; line-height: 1.8; margin-bottom: 15px;">
+        • <strong>요원 성명:</strong> <span id="cert-agent-name" style="color: var(--neon-gold);"></span><br>
+        • <strong>수사 관리 번호:</strong> #2026-AI-6GRADE<br>
+        • <strong>단서 암호 해제:</strong> <span style="color: var(--neon-blue); font-weight: bold;">F - A - C - T - !</span> (완전 규명)<br>
+        • <strong>판정 내용:</strong> 위 요원은 생성형 AI의 작동 원리를 파악하고 4대 결함(과의존, 편향성, 환각, 권리 침해)으로부터 나복사 후보의 공약을 구출하였으므로, 2차시 실천 연구소 공식 출동 자격을 부여함.
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">📸 요원증 화면을 캡처하여 학급 제출함(패들렛)에 등록하세요!</p>
+      <button class="btn" onclick="window.print()">🖨️ 요원증 저장 / 인쇄</button>
+    </div>
+  </div>
+
+  <script>
+    let agentName = "";
+
+    function showStage(stageId) {
+      document.querySelectorAll('.stage-container').forEach(el => el.classList.remove('active'));
+      document.getElementById(stageId).classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    /* Stage 0 */
+    function startInvestigation() {
+      const val = document.getElementById('agent-input-name').value.trim();
+      if (!val) {
+        alert("수사관 닉네임 또는 이름을 입력해 주세요!");
+        return;
+      }
+      agentName = val;
+      document.getElementById('hud-agent-name').innerText = agentName;
+      document.getElementById('badge-F').classList.add('unlocked');
+      showStage('stage-1');
+    }
+
+    /* Stage 1 Pipeline */
+    let pipelineChoices = [];
+    const correctPipeline = ["인터넷 데이터 수집", "규칙/확률 학습", "새로운 글·그림 생성"];
+
+    function choosePipeline(item) {
+      if (pipelineChoices.includes(item) || pipelineChoices.length >= 3) return;
+      pipelineChoices.push(item);
+      updatePipelineDisplay();
+    }
+
+    function resetPipeline() {
+      pipelineChoices = [];
+      updatePipelineDisplay();
+      document.getElementById('btn-stage1-next').disabled = true;
+    }
+
+    function updatePipelineDisplay() {
+      const display = document.getElementById('pipeline-result');
+      if (pipelineChoices.length === 0) {
+        display.innerText = "클릭하여 순서대로 배치하세요.";
+        return;
+      }
+      display.innerText = pipelineChoices.join("  ➔  ");
+      if (pipelineChoices.length === 3) {
+        if (JSON.stringify(pipelineChoices) === JSON.stringify(correctPipeline)) {
+          display.innerHTML = `<span style="color:#85e89d;">✅ 완벽합니다! (${display.innerText})</span>`;
+          document.getElementById('btn-stage1-next').disabled = false;
+        } else {
+          display.innerHTML = `<span style="color:#ff6b6b;">❌ 삐빅! AI는 스스로 생각하지 않습니다. [데이터 수집]이 먼저예요!</span>`;
+        }
+      }
+    }
+
+    function passStage1() {
+      document.getElementById('badge-A').classList.add('unlocked');
+      initStage2();
+      showStage('stage-2');
+    }
+
+    /* Stage 2 Actions */
+    const stage2Actions = [
+      { text: "내 공약의 핵심 목표와 비전 결정하기", answer: "human" },
+      { text: "작성된 문장의 맞춤법을 더 매끄럽게 다듬기", answer: "ai" },
+      { text: "우리 학교 친구들이 겪는 진짜 불편 조사하기", answer: "human" }
+    ];
+    let currentActionIdx = 0;
+
+    function initStage2() {
+      currentActionIdx = 0;
+      updateStage2Card();
+    }
+
+    function updateStage2Card() {
+      if (currentActionIdx < stage2Actions.length) {
+        document.getElementById('card-question-box').innerText = `카드: "${stage2Actions[currentActionIdx].text}"`;
+        document.getElementById('stage2-score').innerText = `진행: ${currentActionIdx} / ${stage2Actions.length}`;
+      } else {
+        document.getElementById('card-question-box').innerHTML = `<span style="color:#85e89d;">✅ 분류 완료! 인간이 주인이어야 뇌가 멈추지 않습니다.</span>`;
+        document.getElementById('stage2-score').innerText = `진행: 3 / 3 (완료)`;
+        document.getElementById('btn-stage2-next').disabled = false;
+      }
+    }
+
+    function classifyAction(type) {
+      if (currentActionIdx >= stage2Actions.length) return;
+      if (stage2Actions[currentActionIdx].answer === type) {
+        currentActionIdx++;
+        updateStage2Card();
+      } else {
+        alert("삐빅! 다시 생각해 보세요. 이 일은 누가 먼저 주도해야 할까요?");
+      }
+    }
+
+    function passStage2() {
+      document.getElementById('badge-C').classList.add('unlocked');
+      showStage('stage-3');
+    }
+
+    /* Stage 3 Bias */
+    function fixBiasPhrase() {
+      const el = document.getElementById('bias-target');
+      if (el.classList.contains('fixed')) return;
+      el.classList.add('fixed');
+      el.innerText = " [모든 학생이 능력과 희망에 따라 공정하게 참여하여] ";
+      alert("🚨 [데이터 편향 적발] 과거 고정관념 문장을 공정한 기준으로 성공적으로 바로잡았습니다!");
+      document.getElementById('btn-stage3-next').disabled = false;
+    }
+
+    function passStage3() {
+      document.getElementById('badge-T').classList.add('unlocked');
+      showStage('stage-4');
+    }
+
+    /* Stage 4 Hallucination & Rights */
+    let defects = { hal: false, law: false };
+
+    function resolveDefect(type) {
+      if (type === 'hal' && !defects.hal) {
+        defects.hal = true;
+        const target = document.getElementById('defect-hal');
+        target.classList.add('checked');
+        target.innerHTML = "<strong>✅ [환각 적발]</strong><br><small>학교 예산상 불가능한 거짓 정보 확인!</small>";
+      }
+      if (type === 'law' && !defects.law) {
+        defects.law = true;
+        const target = document.getElementById('defect-law');
+        target.classList.add('checked');
+        target.innerHTML = "<strong>✅ [권리 침해 적발]</strong><br><small>초상권 무단 침해 확인 완료!</small>";
+      }
+      if (defects.hal && defects.law) {
+        document.getElementById('btn-stage4-next').disabled = false;
+      }
+    }
+
+    function passStage4() {
+      document.getElementById('badge-EX').classList.add('unlocked');
+      document.getElementById('cert-agent-name').innerText = agentName;
+      showStage('stage-final');
+    }
+  </script>
+</body>
+</html>
