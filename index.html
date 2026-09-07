@@ -24,97 +24,127 @@
     #hud { width: 100%; max-width: 850px; display: flex; justify-content: space-between; align-items: center; background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 20px; margin-bottom: 15px; box-shadow: 0 0 15px rgba(0, 210, 255, 0.15); }
     .agent-info { font-size: 0.95rem; font-weight: bold; color: var(--neon-blue); }
     .clue-slots { display: flex; gap: 8px; }
-    .clue-badge { width: 36px; height: 36px; border-radius: 8px; border: 2px dashed var(--text-muted); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1.1rem; color: var(--text-muted); background: rgba(0,0,0,0.3); transition: all 0.4s ease; }
-    .clue-badge.unlocked { border: 2px solid var(--neon-gold); color: #000; background: var(--neon-gold); box-shadow: 0 0 12px var(--neon-gold); transform: scale(1.05); }
+    
+    /* Clue Badge - Initial Hidden State */
+    .clue-badge { width: 36px; height: 36px; border-radius: 8px; border: 2px dashed #2f4370; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; color: #435b88; background: rgba(0,0,0,0.4); transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .clue-badge.unlocked { border: 2px solid var(--neon-gold); color: #000; background: var(--neon-gold); box-shadow: 0 0 15px var(--neon-gold); transform: scale(1.1); }
 
     /* Screen Stage Frame */
-    .stage-container { width: 100%; max-width: 850px; background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 25px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); min-height: 520px; display: none; flex-direction: column; justify-content: space-between; position: relative; }
+    .stage-container { width: 100%; max-width: 850px; background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 25px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); min-height: 540px; display: none; flex-direction: column; justify-content: space-between; position: relative; }
     .stage-container.active { display: flex; animation: fadeIn 0.4s ease forwards; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
     /* Dialogue & Visual Box */
-    .visual-frame { width: 100%; height: 210px; border-radius: 10px; overflow: hidden; background: #131c31; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; margin-bottom: 15px; position: relative; }
+    .visual-frame { width: 100%; height: 190px; border-radius: 10px; overflow: hidden; background: #131c31; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; position: relative; }
     .visual-frame img { width: 100%; height: 100%; object-fit: contain; }
     .placeholder-fallback { position: absolute; text-align: center; color: var(--text-muted); font-size: 0.9rem; padding: 10px; }
 
-    .dialogue-box { background: rgba(0, 0, 0, 0.4); border-left: 4px solid var(--neon-blue); border-radius: 6px; padding: 12px 16px; margin-bottom: 20px; }
-    .dialogue-speaker { font-weight: bold; font-size: 0.9rem; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+    .dialogue-box { background: rgba(0, 0, 0, 0.4); border-left: 4px solid var(--neon-blue); border-radius: 6px; padding: 10px 14px; margin-bottom: 12px; }
+    .dialogue-speaker { font-weight: bold; font-size: 0.85rem; margin-bottom: 3px; }
     .speaker-boksa { color: #ff9d00; }
     .speaker-alpi { color: var(--neon-blue); }
-    .dialogue-text { font-size: 1rem; line-height: 1.5; color: var(--text-main); }
+    .dialogue-text { font-size: 0.95rem; line-height: 1.45; color: var(--text-main); }
+
+    /* Stage 0 Evaluation Form */
+    .eval-box { background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(0, 210, 255, 0.2); border-radius: 10px; padding: 14px; margin: 12px 0; }
+    .eval-title { font-size: 0.9rem; color: var(--neon-gold); font-weight: bold; margin-bottom: 8px; }
+    .risk-meter { display: flex; gap: 8px; justify-content: space-between; margin-bottom: 12px; }
+    .risk-btn { flex: 1; padding: 8px 4px; font-size: 0.8rem; font-weight: bold; border-radius: 6px; border: 2px solid transparent; cursor: pointer; opacity: 0.4; transition: all 0.2s; color: #fff; text-align: center; }
+    .risk-btn:hover { opacity: 0.8; transform: translateY(-2px); }
+    .risk-btn.active { opacity: 1; transform: scale(1.03); box-shadow: 0 0 10px currentColor; font-weight: 900; }
+    .btn-red { background: #e63946; }
+    .btn-orange { background: #f77f00; }
+    .btn-yellow { background: #e0a96d; color: #111; }
+    .btn-lightgreen { background: #70e000; color: #111; }
+    .btn-green { background: #38b000; }
 
     /* Interactive Elements */
     .btn { background: var(--neon-blue); color: #051329; border: none; border-radius: 8px; padding: 12px 24px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; text-align: center; }
     .btn:hover { background: #5ce1e6; box-shadow: 0 0 12px var(--neon-blue); transform: translateY(-2px); }
     .btn:disabled { background: #3a475d; color: #718096; cursor: not-allowed; box-shadow: none; transform: none; }
     
-    .input-box { width: 100%; max-width: 320px; padding: 12px 16px; border-radius: 8px; border: 2px solid var(--border-color); background: #0c1833; color: #fff; font-size: 1rem; text-align: center; outline: none; margin-bottom: 15px; }
+    .input-box { width: 100%; padding: 10px 14px; border-radius: 8px; border: 1.5px solid var(--border-color); background: #0c1833; color: #fff; font-size: 0.95rem; outline: none; margin-bottom: 10px; }
     .input-box:focus { border-color: var(--neon-blue); box-shadow: 0 0 8px var(--neon-blue); }
 
-    /* Stage 1 Puzzle */
+    /* Puzzle / Documents */
     .puzzle-grid { display: flex; gap: 10px; margin: 15px 0; justify-content: center; flex-wrap: wrap; }
-    .puzzle-card { padding: 14px 18px; background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; user-select: none; }
-    .puzzle-card.selected { border-color: var(--neon-gold); background: #2f4370; }
-    .puzzle-slot-display { min-height: 48px; border-radius: 8px; border: 1px dashed var(--neon-blue); display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.95rem; color: var(--neon-gold); margin-bottom: 12px; background: rgba(0,0,0,0.2); }
+    .puzzle-card { padding: 12px 16px; background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.9rem; transition: 0.2s; user-select: none; }
+    .puzzle-card:hover { border-color: var(--neon-gold); }
+    .puzzle-slot-display { min-height: 44px; border-radius: 8px; border: 1px dashed var(--neon-blue); display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.95rem; color: var(--neon-gold); margin-bottom: 12px; background: rgba(0,0,0,0.2); }
 
-    /* Stage 2 Classifier */
     .classifier-arena { display: flex; gap: 15px; margin: 15px 0; }
-    .target-zone { flex: 1; border: 2px dashed var(--border-color); border-radius: 10px; padding: 15px; min-height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: rgba(0,0,0,0.2); }
-    .target-zone h4 { margin-bottom: 8px; font-size: 0.95rem; color: var(--neon-blue); }
-    .action-card-current { background: #243b6b; border: 2px solid var(--neon-gold); padding: 12px 20px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 12px; }
+    .target-zone { flex: 1; border: 2px dashed var(--border-color); border-radius: 10px; padding: 15px; min-height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: rgba(0,0,0,0.2); cursor: pointer; transition: 0.2s; }
+    .target-zone:hover { background: rgba(0, 210, 255, 0.1); border-color: var(--neon-blue); }
+    .target-zone h4 { margin-bottom: 6px; font-size: 0.95rem; color: var(--neon-blue); }
+    .action-card-current { background: #243b6b; border: 2px solid var(--neon-gold); padding: 12px 18px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 10px; }
 
-    /* Stage 3 Document */
-    .document-paper { background: #fdfdfd; color: #111; border-radius: 8px; padding: 18px; line-height: 1.8; margin-bottom: 15px; font-size: 0.95rem; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+    .document-paper { background: #fdfdfd; color: #111; border-radius: 8px; padding: 16px; line-height: 1.8; margin-bottom: 15px; font-size: 0.95rem; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
     .clickable-phrase { background: rgba(255, 51, 102, 0.15); border-bottom: 2px dashed var(--neon-red); cursor: pointer; padding: 2px 4px; border-radius: 4px; transition: 0.2s; font-weight: bold; }
     .clickable-phrase:hover { background: rgba(255, 51, 102, 0.35); }
     .clickable-phrase.fixed { background: #d4edda; color: #155724; border-bottom: 2px solid #28a745; cursor: default; }
 
-    /* Stage 4 Scanner */
-    .poster-board { position: relative; background: #1a2846; border: 2px solid var(--border-color); border-radius: 10px; padding: 20px; margin-bottom: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .poster-board { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
     .evidence-tag { border: 2px dashed var(--neon-red); border-radius: 8px; padding: 12px; cursor: pointer; background: rgba(255, 51, 102, 0.08); transition: 0.2s; }
     .evidence-tag:hover { background: rgba(255, 51, 102, 0.2); }
     .evidence-tag.checked { border: 2px solid #28a745; background: rgba(40, 167, 69, 0.2); color: #85e89d; }
 
-    /* Final Certificate */
-    .cert-frame { border: 3px solid var(--neon-gold); border-radius: 12px; padding: 25px; text-align: center; background: radial-gradient(circle, #19274a 0%, #0c1426 100%); box-shadow: 0 0 25px rgba(255, 210, 0, 0.3); }
-    .cert-emblem { width: 100px; height: 100px; margin: 0 auto 15px; }
+    .cert-frame { border: 3px solid var(--neon-gold); border-radius: 12px; padding: 22px; text-align: center; background: radial-gradient(circle, #19274a 0%, #0c1426 100%); box-shadow: 0 0 25px rgba(255, 210, 0, 0.3); }
+    .cert-emblem { width: 90px; height: 90px; margin: 0 auto 12px; }
     .cert-emblem img { width: 100%; height: 100%; object-fit: contain; }
   </style>
 </head>
 <body>
 
-  <!-- Top HUD Bar -->
+  <!-- Top HUD Bar: 처음엔 '?' 로 잠겨있음 -->
   <div id="hud">
-    <div class="agent-info">🕵️ 요원명: <span id="hud-agent-name">대기 중</span> (제2026-AI-6호)</div>
+    <div class="agent-info">🕵️ 수사관: <span id="hud-agent-name">미등록 요원</span></div>
     <div class="clue-slots">
-      <div class="clue-badge" id="badge-F">F</div>
-      <div class="clue-badge" id="badge-A">A</div>
-      <div class="clue-badge" id="badge-C">C</div>
-      <div class="clue-badge" id="badge-T">T</div>
-      <div class="clue-badge" id="badge-EX">!</div>
+      <div class="clue-badge" id="badge-F">?</div>
+      <div class="clue-badge" id="badge-A">?</div>
+      <div class="clue-badge" id="badge-C">?</div>
+      <div class="clue-badge" id="badge-T">?</div>
+      <div class="clue-badge" id="badge-EX">?</div>
     </div>
   </div>
 
-  <!-- Stage 0: Register -->
+  <!-- Stage 0: 입건 및 초기 감정 평가 -->
   <div class="stage-container active" id="stage-0">
     <div>
       <div class="visual-frame">
         <div class="placeholder-fallback">📁 [images/stage0_sos.png]<br>당황한 나복사와 알피 일러스트</div>
         <img src="images/stage0_sos.png" alt="사건 접수" onerror="this.style.display='none'">
       </div>
+
       <div class="dialogue-box">
-        <div class="dialogue-speaker speaker-boksa">🚨 나복사 후보</div>
-        <div class="dialogue-text">"팩트 수사관님! 부회장 당선되려고 알피가 써준 공약을 그대로 냈는데... 전교생이 비웃고 선생님이 교무실로 부르셨어요! 제발 살려주세요!"</div>
+        <div class="dialogue-speaker speaker-boksa">🚨 나복사 후보 긴급 진술</div>
+        <div class="dialogue-text">"수사관님! 부회장 당선되려고 알피가 써준 공약을 그대로 냈는데... 전교생이 비웃고 선생님이 교무실로 부르셨어요! 제발 도와주세요!"</div>
       </div>
-      <div class="dialogue-box" style="border-left-color: var(--neon-blue);">
-        <div class="dialogue-speaker speaker-alpi">🤖 AI 매니저 알피</div>
-        <div class="dialogue-text">"삐빅... 전 인터넷에 있는 데이터를 조합했을 뿐인데... 왜 화를 내는지 모르겠어요."</div>
+
+      <!-- 탐구 인터랙션 1: 5단계 위험도 신호등 -->
+      <div class="eval-box">
+        <div class="eval-title">📊 수사관 초기 평가 ① : 나복사의 공약 위험도는 몇 단계인가요?</div>
+        <div class="risk-meter">
+          <button type="button" class="risk-btn btn-red" onclick="selectRisk(this, '극도로 위험 (100%)')">🚨 심각 (빨강)</button>
+          <button type="button" class="risk-btn btn-orange" onclick="selectRisk(this, '위험 (75%)')">⚠️ 주의 (주황)</button>
+          <button type="button" class="risk-btn btn-yellow" onclick="selectRisk(this, '보통 (50%)')">⚖️ 보통 (노랑)</button>
+          <button type="button" class="risk-btn btn-lightgreen" onclick="selectRisk(this, '양호 (25%)')">🌱 약간 (연두)</button>
+          <button type="button" class="risk-btn btn-green" onclick="selectRisk(this, '완벽 안전 (0%)')">✅ 안전 (초록)</button>
+        </div>
+        <div id="risk-feedback" style="font-size: 0.85rem; color: var(--neon-blue); text-align: center; min-height: 18px;"></div>
+      </div>
+
+      <!-- 탐구 인터랙션 2: 초기 발견 문제점 및 서명 -->
+      <div class="eval-box">
+        <div class="eval-title">🔍 수사관 초기 평가 ② : 벽보에서 가장 이상하거나 의심스러운 점은?</div>
+        <input type="text" id="agent-doubt-input" class="input-box" placeholder="예: 랍스터 급식이 거짓말 같아요 / 성별을 나누는 게 이상해요 등">
+        
+        <div class="eval-title" style="margin-top: 8px;">✍️ 사건 담당 수사관 등록 서명</div>
+        <input type="text" id="agent-input-name" class="input-box" placeholder="수사관 본인 이름(또는 닉네임) 입력" maxlength="8">
       </div>
     </div>
+
     <div style="text-align: center; margin-top: 10px;">
-      <input type="text" id="agent-input-name" class="input-box" placeholder="수사관 닉네임(이름) 입력" maxlength="8">
-      <br>
-      <button class="btn" onclick="startInvestigation()">수사관 배지 발급 & 수사 개시 ➔</button>
+      <button class="btn" onclick="startInvestigation()">사건 배당 접수 & 단서 'F' 획득 ➔</button>
     </div>
   </div>
 
@@ -141,7 +171,7 @@
     </div>
     <div style="display: flex; justify-content: space-between; align-items: center;">
       <button class="btn" style="background: transparent; color: var(--text-muted); border: 1px solid var(--text-muted);" onclick="resetPipeline()">다시 선택</button>
-      <button class="btn" id="btn-stage1-next" disabled onclick="passStage1()">단서 'A' 확보 & 다음 ➔</button>
+      <button class="btn" id="btn-stage1-next" disabled onclick="passStage1()">단서 'A' 해제 & 다음 ➔</button>
     </div>
   </div>
 
@@ -173,7 +203,7 @@
     </div>
     <div style="text-align: right;">
       <span id="stage2-score" style="font-size: 0.9rem; margin-right: 15px; color: var(--neon-blue);">진행: 0 / 3</span>
-      <button class="btn" id="btn-stage2-next" disabled onclick="passStage2()">단서 'C' 확보 & 다음 ➔</button>
+      <button class="btn" id="btn-stage2-next" disabled onclick="passStage2()">단서 'C' 해제 & 다음 ➔</button>
     </div>
   </div>
 
@@ -201,7 +231,7 @@
       </div>
     </div>
     <div style="text-align: right;">
-      <button class="btn" id="btn-stage3-next" disabled onclick="passStage3()">단서 'T' 확보 & 다음 ➔</button>
+      <button class="btn" id="btn-stage3-next" disabled onclick="passStage3()">단서 'T' 해제 & 다음 ➔</button>
     </div>
   </div>
 
@@ -231,7 +261,7 @@
       </div>
     </div>
     <div style="text-align: right;">
-      <button class="btn" id="btn-stage4-next" disabled onclick="passStage4()">마지막 단서 '!' 확보 ➔</button>
+      <button class="btn" id="btn-stage4-next" disabled onclick="passStage4()">마지막 단서 '!' 해제 ➔</button>
     </div>
   </div>
 
@@ -245,18 +275,21 @@
       <h2 style="color: var(--neon-gold); margin-bottom: 8px;">AI 비판적 탐구자 요원증</h2>
       <p style="color: var(--neon-blue); font-size: 0.9rem; margin-bottom: 15px;">OFFICIAL FACT-CHECKER CERTIFICATE</p>
       <div style="text-align: left; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; font-size: 0.95rem; line-height: 1.8; margin-bottom: 15px;">
-        • <strong>요원 성명:</strong> <span id="cert-agent-name" style="color: var(--neon-gold);"></span><br>
+        • <strong>수사관 성명:</strong> <span id="cert-agent-name" style="color: var(--neon-gold);"></span><br>
         • <strong>수사 관리 번호:</strong> #2026-AI-6GRADE<br>
-        • <strong>단서 암호 해제:</strong> <span style="color: var(--neon-blue); font-weight: bold;">F - A - C - T - !</span> (완전 규명)<br>
-        • <strong>판정 내용:</strong> 위 요원은 생성형 AI의 작동 원리를 파악하고 4대 결함(과의존, 편향성, 환각, 권리 침해)으로부터 나복사 후보의 공약을 구출하였으므로, 2차시 실천 연구소 공식 출동 자격을 부여함.
+        • <strong>초기 의심 소견:</strong> <span id="cert-agent-opinion" style="color: #85e89d;"></span><br>
+        • <strong>단서 암호 해제:</strong> <span style="color: var(--neon-gold); font-weight: bold;">F - A - C - T - !</span> (완전 규명)<br>
+        • <strong>판정 내용:</strong> 위 수사관은 AI의 3단계 작동 원리를 규명하고 4대 결함(과의존, 편향성, 환각, 권리 침해)을 밝혀내었으므로 '공식 FACT 요원' 자격을 부여함.
       </div>
-      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">📸 요원증 화면을 캡처하여 학급 제출함(패들렛)에 등록하세요!</p>
-      <button class="btn" onclick="window.print()">🖨️ 요원증 저장 / 인쇄</button>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">📸 요원증 화면을 캡처하여 학급 제출 창구(패들렛)에 제출하세요!</p>
+      <button class="btn" onclick="window.print()">🖨️ 요원증 인쇄 / PDF 저장</button>
     </div>
   </div>
 
   <script>
     let agentName = "";
+    let agentDoubt = "";
+    let selectedRiskScore = "";
 
     function showStage(stageId) {
       document.querySelectorAll('.stage-container').forEach(el => el.classList.remove('active'));
@@ -264,20 +297,48 @@
       window.scrollTo(0, 0);
     }
 
-    /* Stage 0 */
+    /* 단서 배지 잠금 해제 헬퍼 */
+    function unlockBadge(id, letter) {
+      const badge = document.getElementById(id);
+      badge.innerText = letter;
+      badge.classList.add('unlocked');
+    }
+
+    /* Stage 0 : 신호등 선택 */
+    function selectRisk(btn, desc) {
+      document.querySelectorAll('.risk-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedRiskScore = desc;
+      document.getElementById('risk-feedback').innerText = `수사관 판정: [${desc}] 감지됨!`;
+    }
+
+    /* Stage 0 : 수사관 등록 & 배당 */
     function startInvestigation() {
-      const val = document.getElementById('agent-input-name').value.trim();
-      if (!val) {
-        alert("수사관 닉네임 또는 이름을 입력해 주세요!");
+      const nameVal = document.getElementById('agent-input-name').value.trim();
+      const doubtVal = document.getElementById('agent-doubt-input').value.trim();
+
+      if (!selectedRiskScore) {
+        alert("나복사 공약의 위험도 신호등(색상)을 먼저 선택해 주세요!");
         return;
       }
-      agentName = val;
-      document.getElementById('hud-agent-name').innerText = agentName;
-      document.getElementById('badge-F').classList.add('unlocked');
+      if (!doubtVal) {
+        alert("공약서에서 어떤 문제가 의심되는지 한 줄 소견을 적어주세요!");
+        return;
+      }
+      if (!nameVal) {
+        alert("수사관 이름을 서명칸에 입력해 주세요!");
+        return;
+      }
+
+      agentName = nameVal;
+      agentDoubt = doubtVal;
+
+      document.getElementById('hud-agent-name').innerText = `${agentName} 요원`;
+      unlockBadge('badge-F', 'F'); // 첫 번째 단서 F 해제!
       showStage('stage-1');
     }
 
-    /* Stage 1 Pipeline */
+    /* Stage 1 : Pipeline */
     let pipelineChoices = [];
     const correctPipeline = ["인터넷 데이터 수집", "규칙/확률 학습", "새로운 글·그림 생성"];
 
@@ -302,21 +363,21 @@
       display.innerText = pipelineChoices.join("  ➔  ");
       if (pipelineChoices.length === 3) {
         if (JSON.stringify(pipelineChoices) === JSON.stringify(correctPipeline)) {
-          display.innerHTML = `<span style="color:#85e89d;">✅ 완벽합니다! (${display.innerText})</span>`;
+          display.innerHTML = `<span style="color:#85e89d;">✅ 정확합니다! (${display.innerText})</span>`;
           document.getElementById('btn-stage1-next').disabled = false;
         } else {
-          display.innerHTML = `<span style="color:#ff6b6b;">❌ 삐빅! AI는 스스로 생각하지 않습니다. [데이터 수집]이 먼저예요!</span>`;
+          display.innerHTML = `<span style="color:#ff6b6b;">❌ 삐빅! AI는 먼저 학습 데이터를 먹어야 작동합니다. 다시 선택하세요!</span>`;
         }
       }
     }
 
     function passStage1() {
-      document.getElementById('badge-A').classList.add('unlocked');
+      unlockBadge('badge-A', 'A'); // 단서 A 해제!
       initStage2();
       showStage('stage-2');
     }
 
-    /* Stage 2 Actions */
+    /* Stage 2 : Actions */
     const stage2Actions = [
       { text: "내 공약의 핵심 목표와 비전 결정하기", answer: "human" },
       { text: "작성된 문장의 맞춤법을 더 매끄럽게 다듬기", answer: "ai" },
@@ -334,7 +395,7 @@
         document.getElementById('card-question-box').innerText = `카드: "${stage2Actions[currentActionIdx].text}"`;
         document.getElementById('stage2-score').innerText = `진행: ${currentActionIdx} / ${stage2Actions.length}`;
       } else {
-        document.getElementById('card-question-box').innerHTML = `<span style="color:#85e89d;">✅ 분류 완료! 인간이 주인이어야 뇌가 멈추지 않습니다.</span>`;
+        document.getElementById('card-question-box').innerHTML = `<span style="color:#85e89d;">✅ 뇌 기능 정상 복구! 인간이 생각의 주인이 되어야 합니다.</span>`;
         document.getElementById('stage2-score').innerText = `진행: 3 / 3 (완료)`;
         document.getElementById('btn-stage2-next').disabled = false;
       }
@@ -346,31 +407,31 @@
         currentActionIdx++;
         updateStage2Card();
       } else {
-        alert("삐빅! 다시 생각해 보세요. 이 일은 누가 먼저 주도해야 할까요?");
+        alert("삐빅! 다시 고민해 보세요. 사람이 먼저 결정해야 할까요, AI의 도움을 받을 부분일까요?");
       }
     }
 
     function passStage2() {
-      document.getElementById('badge-C').classList.add('unlocked');
+      unlockBadge('badge-C', 'C'); // 단서 C 해제!
       showStage('stage-3');
     }
 
-    /* Stage 3 Bias */
+    /* Stage 3 : Bias */
     function fixBiasPhrase() {
       const el = document.getElementById('bias-target');
       if (el.classList.contains('fixed')) return;
       el.classList.add('fixed');
       el.innerText = " [모든 학생이 능력과 희망에 따라 공정하게 참여하여] ";
-      alert("🚨 [데이터 편향 적발] 과거 고정관념 문장을 공정한 기준으로 성공적으로 바로잡았습니다!");
+      alert("🚨 [데이터 편향 적발] 과거 고정관념 문장을 모든 학생이 참여하는 공정한 문장으로 바로잡았습니다!");
       document.getElementById('btn-stage3-next').disabled = false;
     }
 
     function passStage3() {
-      document.getElementById('badge-T').classList.add('unlocked');
+      unlockBadge('badge-T', 'T'); // 단서 T 해제!
       showStage('stage-4');
     }
 
-    /* Stage 4 Hallucination & Rights */
+    /* Stage 4 : Hallucination & Rights */
     let defects = { hal: false, law: false };
 
     function resolveDefect(type) {
@@ -378,7 +439,7 @@
         defects.hal = true;
         const target = document.getElementById('defect-hal');
         target.classList.add('checked');
-        target.innerHTML = "<strong>✅ [환각 적발]</strong><br><small>학교 예산상 불가능한 거짓 정보 확인!</small>";
+        target.innerHTML = "<strong>✅ [환각 적발]</strong><br><small>학교 예산상 불가능한 거짓 정보 확인 완료!</small>";
       }
       if (type === 'law' && !defects.law) {
         defects.law = true;
@@ -392,8 +453,9 @@
     }
 
     function passStage4() {
-      document.getElementById('badge-EX').classList.add('unlocked');
+      unlockBadge('badge-EX', '!'); // 마지막 단서 ! 해제!
       document.getElementById('cert-agent-name').innerText = agentName;
+      document.getElementById('cert-agent-opinion').innerText = `"${agentDoubt}"`;
       showStage('stage-final');
     }
   </script>
