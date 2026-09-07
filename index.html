@@ -35,8 +35,9 @@
     @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
     /* Dialogue & Visual Box */
-    .visual-frame { width: 100%; height: 190px; border-radius: 10px; overflow: hidden; background: #131c31; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; position: relative; }
-    .visual-frame img { width: 100%; height: 100%; object-fit: contain; }
+    .visual-frame { width: 100%; height: 260px; border-radius: 10px; overflow: hidden; background: #131c31; border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; position: relative; }
+    .visual-frame img { width: 100%; height: 100%; object-fit: contain; cursor: zoom-in; transition: transform 0.2s; }
+    .visual-frame img:hover { transform: scale(1.02); }
     .placeholder-fallback { position: absolute; text-align: center; color: var(--text-muted); font-size: 0.9rem; padding: 10px; }
 
     .dialogue-box { background: rgba(0, 0, 0, 0.4); border-left: 4px solid var(--neon-blue); border-radius: 6px; padding: 10px 14px; margin-bottom: 12px; }
@@ -91,6 +92,12 @@
     .cert-frame { border: 3px solid var(--neon-gold); border-radius: 12px; padding: 22px; text-align: center; background: radial-gradient(circle, #19274a 0%, #0c1426 100%); box-shadow: 0 0 25px rgba(255, 210, 0, 0.3); }
     .cert-emblem { width: 90px; height: 90px; margin: 0 auto 12px; }
     .cert-emblem img { width: 100%; height: 100%; object-fit: contain; }
+
+    /* Lightbox Modal */
+    .image-modal { display: none; position: fixed; z-index: 9999; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(4px); align-items: center; justify-content: center; cursor: zoom-out; }
+    .image-modal.active { display: flex; animation: modalFade 0.2s ease forwards; }
+    .image-modal img { max-width: 92%; max-height: 90vh; border-radius: 12px; border: 2px solid var(--neon-blue); box-shadow: 0 0 25px rgba(0, 210, 255, 0.4); object-fit: contain; }
+    @keyframes modalFade { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
   </style>
 </head>
 <body>
@@ -111,8 +118,8 @@
   <div class="stage-container active" id="stage-0">
     <div>
       <div class="visual-frame">
-  <img src="images/stage0_sos.png" alt="사건 접수">
-</div>
+        <img src="images/stage0_sos.png" alt="사건 접수" onclick="openModal(this.src)" title="클릭하면 크게 볼 수 있습니다">
+      </div>
 
       <div class="dialogue-box">
         <div class="dialogue-speaker speaker-boksa">🚨 나복사 후보 긴급 진술</div>
@@ -152,7 +159,7 @@
     <div>
       <div class="visual-frame">
         <div class="placeholder-fallback">⚙️ [images/stage1_pipeline.png]<br>데이터 공장 파이프라인 다이어그램</div>
-        <img src="images/stage1_pipeline.png" alt="원리 분석" onerror="this.style.display='none'">
+        <img src="images/stage1_pipeline.png" alt="원리 분석" onclick="openModal(this.src)" onerror="this.style.display='none'">
       </div>
       <div class="dialogue-box">
         <div class="dialogue-speaker speaker-alpi">🤖 AI 매니저 알피</div>
@@ -170,7 +177,7 @@
     </div>
     <div style="display: flex; justify-content: space-between; align-items: center;">
       <button class="btn" style="background: transparent; color: var(--text-muted); border: 1px solid var(--text-muted);" onclick="resetPipeline()">다시 선택</button>
-      <button class="btn" id="btn-stage1-next" disabled onclick="passStage1()">🔍수사 코드 조각 확보 ➔</button>
+      <button class="btn" id="btn-stage1-next" disabled onclick="passStage1()">🔍 수사 코드 조각 확보 ➔</button>
     </div>
   </div>
 
@@ -179,7 +186,7 @@
     <div>
       <div class="visual-frame">
         <div class="placeholder-fallback">🧠 [images/stage2_brain.png]<br>생각을 멈춘 뇌 vs 번쩍이는 컬러 뇌</div>
-        <img src="images/stage2_brain.png" alt="과의존 분석" onerror="this.style.display='none'">
+        <img src="images/stage2_brain.png" alt="과의존 분석" onclick="openModal(this.src)" onerror="this.style.display='none'">
       </div>
       <div class="dialogue-box">
         <div class="dialogue-speaker speaker-boksa">😓 나복사 후보</div>
@@ -211,7 +218,7 @@
     <div>
       <div class="visual-frame">
         <div class="placeholder-fallback">📜 [images/stage3_bias.png]<br>편향된 공약 벽보 문서</div>
-        <img src="images/stage3_bias.png" alt="편향성 점검" onerror="this.style.display='none'">
+        <img src="images/stage3_bias.png" alt="편향성 점검" onclick="openModal(this.src)" onerror="this.style.display='none'">
       </div>
       <div class="dialogue-box">
         <div class="dialogue-speaker speaker-alpi">🤖 AI 매니저 알피</div>
@@ -239,7 +246,7 @@
     <div>
       <div class="visual-frame">
         <div class="placeholder-fallback">🦞 [images/stage4_hallucination.png]<br>랍스터 우주선 포스터와 친구 얼굴 합성본</div>
-        <img src="images/stage4_hallucination.png" alt="환각 권리침해" onerror="this.style.display='none'">
+        <img src="images/stage4_hallucination.png" alt="환각 권리침해" onclick="openModal(this.src)" onerror="this.style.display='none'">
       </div>
       <div class="dialogue-box">
         <div class="dialogue-speaker speaker-boksa">😭 나복사 후보</div>
@@ -269,7 +276,7 @@
     <div class="cert-frame">
       <div class="cert-emblem">
         <div class="placeholder-fallback" style="font-size:0.7rem;">🏅 [images/badge_complete.png]</div>
-        <img src="images/badge_complete.png" alt="FACT 배지" onerror="this.style.display='none'">
+        <img src="images/badge_complete.png" alt="FACT 배지" onclick="openModal(this.src)" onerror="this.style.display='none'">
       </div>
       <h2 style="color: var(--neon-gold); margin-bottom: 8px;">AI 비판적 탐구자 요원증</h2>
       <p style="color: var(--neon-blue); font-size: 0.9rem; margin-bottom: 15px;">OFFICIAL FACT-CHECKER CERTIFICATE</p>
@@ -285,8 +292,13 @@
     </div>
   </div>
 
+  <!-- 이미지 확대 모달 창 -->
+  <div id="imgModal" class="image-modal" onclick="closeModal()">
+    <img id="modalImg" src="" alt="확대 이미지">
+  </div>
+
   <script>
-let agentName = "";
+    let agentName = "";
     let agentDoubt = "";
     let selectedRiskScore = "";
 
@@ -458,6 +470,18 @@ let agentName = "";
       document.getElementById('cert-agent-name').innerText = agentName;
       document.getElementById('cert-agent-opinion').innerText = `"${agentDoubt}"`;
       showStage('stage-final');
+    }
+
+    /* 이미지 확대 모달 열기/닫기 */
+    function openModal(imgSrc) {
+      const modal = document.getElementById('imgModal');
+      const modalImg = document.getElementById('modalImg');
+      modalImg.src = imgSrc;
+      modal.classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('imgModal').classList.remove('active');
     }
   </script>
 </body>
