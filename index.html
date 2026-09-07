@@ -59,6 +59,23 @@
     .btn-lightgreen { background: #70e000; color: #111; }
     .btn-green { background: #38b000; }
 
+    /* Stage 1 Simulator Styles */
+    .sim-container { background: rgba(0, 0, 0, 0.35); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; margin: 12px 0; }
+    .data-cards-pool { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 12px; }
+    .data-chip { background: #1f3056; border: 1.5px solid #3c548c; border-radius: 20px; padding: 6px 12px; font-size: 0.85rem; cursor: pointer; user-select: none; transition: 0.2s; }
+    .data-chip:hover { border-color: var(--neon-blue); transform: translateY(-2px); }
+    .data-chip.selected { background: #005f73; border-color: var(--neon-blue); color: #fff; box-shadow: 0 0 8px rgba(0, 210, 255, 0.5); }
+    
+    .drop-basket { min-height: 52px; border: 2px dashed var(--neon-blue); border-radius: 10px; padding: 8px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px; background: rgba(0, 210, 255, 0.05); margin-bottom: 10px; }
+    .basket-placeholder { font-size: 0.85rem; color: var(--text-muted); }
+    
+    .prob-display-box { background: #0a1122; border-radius: 8px; padding: 10px; margin: 10px 0; border: 1px solid rgba(255, 210, 0, 0.2); }
+    .prob-bar-track { background: #16223d; border-radius: 6px; height: 16px; width: 100%; overflow: hidden; margin: 4px 0 8px; display: flex; }
+    .prob-bar-fill { height: 100%; transition: width 0.4s ease; }
+    
+    .generated-speech { background: rgba(255, 210, 0, 0.1); border-left: 3px solid var(--neon-gold); padding: 8px 12px; border-radius: 4px; font-size: 0.9rem; color: #fff; margin-top: 8px; min-height: 38px; display: flex; align-items: center; }
+    .stage1-written-task { background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(0, 210, 255, 0.2); border-radius: 10px; padding: 14px; margin-top: 14px; }
+
     /* Interactive Elements */
     .btn { background: var(--neon-blue); color: #051329; border: none; border-radius: 8px; padding: 12px 24px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; text-align: center; }
     .btn:hover { background: #5ce1e6; box-shadow: 0 0 12px var(--neon-blue); transform: translateY(-2px); }
@@ -154,29 +171,81 @@
     </div>
   </div>
 
-  <!-- Stage 1: Pipeline -->
+  <!-- Stage 1: AI 원리 탐구 & 시뮬레이터 -->
   <div class="stage-container" id="stage-1">
     <div>
       <div class="visual-frame">
-        <div class="placeholder-fallback">⚙️ [images/stage1_pipeline.png]<br>데이터 공장 파이프라인 다이어그램</div>
-        <img src="images/stage1_pipeline.png" alt="원리 분석" onclick="openModal(this.src)" onerror="this.style.display='none'">
-      </div>
+  <img src="images/stage1_pipeline.png" alt="원리 분석" onclick="openModal(this.src)">
+</div>
+
       <div class="dialogue-box">
         <div class="dialogue-speaker speaker-alpi">🤖 AI 매니저 알피</div>
-        <div class="dialogue-text">"저는 스스로 생각하는 생명체가 아니에요! 인간이 넣어준 [데이터]를 먹고 [학습]해서 가장 확률 높은 문장을 [출력]할 뿐입니다!"</div>
+        <div class="dialogue-text">"제가 어떤 원리를 통해 [급식 혁명]이라는 공약을 제시하게 되었을까요?"</div>
       </div>
-      <p style="font-size: 0.95rem; color: var(--neon-gold); font-weight: bold; text-align: center; margin-bottom: 10px;">
-        미션: AI 작동 원리 3단계를 순서대로 선택하여 파이프라인을 완성하세요.
-      </p>
-      <div class="puzzle-slot-display" id="pipeline-result">클릭하여 순서대로 배치하세요.</div>
-      <div class="puzzle-grid" id="pipeline-options">
-        <div class="puzzle-card" onclick="choosePipeline('규칙/확률 학습')">규칙/확률 학습</div>
-        <div class="puzzle-card" onclick="choosePipeline('새로운 글·그림 생성')">새로운 글·그림 생성</div>
-        <div class="puzzle-card" onclick="choosePipeline('인터넷 데이터 수집')">인터넷 데이터 수집</div>
+
+      <!-- 탐구 인터랙션 1: 데이터 주입 & 확률 생성 시뮬레이터 -->
+      <div class="sim-container">
+        <div style="font-size: 0.9rem; font-weight: bold; color: var(--neon-gold); margin-bottom: 6px;">
+          🧪 수사 실험실: 알피의 두뇌에 학습 데이터 먹여보기
+        </div>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
+          인터넷 데이터 카드를 클릭하여 AI 학습 바구니에 담아보세요. (최대 3개)
+        </p>
+
+        <!-- 데이터 카드 풀 -->
+        <div class="data-cards-pool" id="data-pool">
+          <div class="data-chip" onclick="toggleDataChip(this, 'lobster')">🦞 [맛집 블로그] "랍스터 버터구이 무한 리필 꿀팁"</div>
+          <div class="data-chip" onclick="toggleDataChip(this, 'space')">🚀 [SF 영화 후기] "탐사선 우주 식량 캡슐 디저트"</div>
+          <div class="data-chip" onclick="toggleDataChip(this, 'game')">🎮 [게임 커뮤니티] "점심시간 E-스포츠 경기 개최"</div>
+          <div class="data-chip" onclick="toggleDataChip(this, 'nutrition')">🥗 [학교 식단 기준표] "친환경 잡곡밥 & 영양 밸런스 식단"</div>
+          <div class="data-chip" onclick="toggleDataChip(this, 'clean')">🧹 [생활 교육 지침] "급식 후 1인 1구역 깨끗한 분리배출"</div>
+        </div>
+
+        <!-- 바구니 -->
+        <div class="drop-basket" id="data-basket">
+          <span class="basket-placeholder">위 카드를 클릭하여 학습 데이터를 채우세요 (최대 3개).</span>
+        </div>
+
+        <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+          <button type="button" class="btn" style="padding: 6px 14px; font-size: 0.85rem;" onclick="runAiSim()">⚙️ AI 확률 계산 및 공약 생성</button>
+          <button type="button" class="btn" style="padding: 6px 14px; font-size: 0.85rem; background: #3a475d; color: #fff;" onclick="resetSimData()">🔄 데이터 초기화</button>
+        </div>
+
+        <!-- 확률 시각화 및 생성 결과 -->
+        <div class="prob-display-box" id="sim-result-box" style="display: none;">
+          <div style="font-size: 0.82rem; color: var(--neon-blue); font-weight: bold;">📊 알피의 단어 연결 확률 분석 결과:</div>
+          <div id="prob-bars-container"></div>
+          <div class="generated-speech" id="sim-generated-text"></div>
+        </div>
+      </div>
+
+      <!-- 탐구 인터랙션 2: 3단계 파이프라인 퍼즐 -->
+      <div style="margin-top: 14px;">
+        <p style="font-size: 0.9rem; color: var(--neon-gold); font-weight: bold; text-align: center; margin-bottom: 8px;">
+          미션 ①: 방금 체험한 AI 작동 원리 3단계를 순서대로 완성하세요.
+        </p>
+        <div class="puzzle-slot-display" id="pipeline-result">클릭하여 순서대로 배치하세요.</div>
+        <div class="puzzle-grid" id="pipeline-options">
+          <div class="puzzle-card" onclick="choosePipeline('규칙/확률 학습')">규칙/확률 학습</div>
+          <div class="puzzle-card" onclick="choosePipeline('새로운 글·그림 생성')">새로운 글·그림 생성</div>
+          <div class="puzzle-card" onclick="choosePipeline('인터넷 데이터 수집')">인터넷 데이터 수집</div>
+        </div>
+        <div style="text-align: center; margin-bottom: 8px;">
+          <button type="button" class="btn" style="background: transparent; color: var(--text-muted); border: 1px solid var(--text-muted); padding: 4px 12px; font-size: 0.8rem;" onclick="resetPipeline()">퍼즐 다시 선택</button>
+        </div>
+      </div>
+
+      <!-- 탐구 인터랙션 3: 수사관 서술형 탐구 과제 -->
+      <div class="stage1-written-task">
+        <div class="eval-title">미션 ②: [수사관 답변] 알피가 이런 공약 1번(급식 혁명)을 만들게 된 이유는 무엇인가요?</div>
+        <input type="text" id="stage1-q1-input" class="input-box" placeholder="예: 인터넷 맛집과 우주 글 데이터를 그대로 학습해서 가장 확률 높은 단어를 이어붙였기 때문 등">
+
+        <div class="eval-title" style="margin-top: 10px;">미션 ③: AI의 원리를 활용해 '진짜 올바른 급식 공약'을 만들기 위해 필요한 데이터와 그 이유는?</div>
+        <input type="text" id="stage1-q2-input" class="input-box" placeholder="예: 학생들의 실제 선호도 설문과 학교 급식 예산 데이터가 필요하다. 실현 가능해야 하기 때문 등">
       </div>
     </div>
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-      <button class="btn" style="background: transparent; color: var(--text-muted); border: 1px solid var(--text-muted);" onclick="resetPipeline()">다시 선택</button>
+
+    <div style="text-align: right; margin-top: 15px;">
       <button class="btn" id="btn-stage1-next" disabled onclick="passStage1()">🔍 수사 코드 조각 확보 ➔</button>
     </div>
   </div>
@@ -347,9 +416,93 @@
       showStage('stage-1');
     }
 
-    /* Stage 1 : Pipeline */
+    /* Stage 1 : AI Simulator Logic */
+    let selectedChips = [];
+
+    function toggleDataChip(el, type) {
+      if (selectedChips.includes(type)) {
+        selectedChips = selectedChips.filter(item => item !== type);
+        el.classList.remove('selected');
+      } else {
+        if (selectedChips.length >= 3) {
+          alert("학습 데이터는 최대 3개까지만 담을 수 있습니다!");
+          return;
+        }
+        selectedChips.push(type);
+        el.classList.add('selected');
+      }
+      updateBasketUI();
+    }
+
+    function updateBasketUI() {
+      const basket = document.getElementById('data-basket');
+      if (selectedChips.length === 0) {
+        basket.innerHTML = '<span class="basket-placeholder">위 카드를 클릭하여 학습 데이터를 채우세요 (최대 3개).</span>';
+        return;
+      }
+      const labels = {
+        lobster: '🦞 랍스터 맛집 데이터',
+        space: '🚀 우주 식량 리뷰 데이터',
+        game: '🎮 E-스포츠 커뮤니티 데이터',
+        nutrition: '🥗 학교 식단 가이드 데이터',
+        clean: '🧹 교실 정리 지침 데이터'
+      };
+      basket.innerHTML = selectedChips.map(c => `<span class="data-chip selected" style="cursor:default;">${labels[c]}</span>`).join('');
+    }
+
+    function resetSimData() {
+      selectedChips = [];
+      document.querySelectorAll('.data-chip').forEach(c => c.classList.remove('selected'));
+      updateBasketUI();
+      document.getElementById('sim-result-box').style.display = 'none';
+    }
+
+    function runAiSim() {
+      if (selectedChips.length === 0) {
+        alert("학습시킬 데이터를 1개 이상 선택해 주세요!");
+        return;
+      }
+
+      const resultBox = document.getElementById('sim-result-box');
+      const barsContainer = document.getElementById('prob-bars-container');
+      const generatedText = document.getElementById('sim-generated-text');
+      resultBox.style.display = 'block';
+
+      let probLobster = selectedChips.includes('lobster') ? 78 : 6;
+      let probSpace = selectedChips.includes('space') ? 69 : 4;
+      let probNutrition = selectedChips.includes('nutrition') ? 75 : 8;
+      let probGame = selectedChips.includes('game') ? 82 : 5;
+
+      barsContainer.innerHTML = `
+        <div style="font-size:0.8rem; margin-top:4px;">"급식" 다음 올 단어 확률: 🦞 랍스터 (${probLobster}%) / 🥗 친환경 영양 (${probNutrition}%)</div>
+        <div class="prob-bar-track">
+          <div class="prob-bar-fill" style="width: ${probLobster}%; background: var(--neon-red);"></div>
+          <div class="prob-bar-fill" style="width: ${probNutrition}%; background: #38b000;"></div>
+        </div>
+        <div style="font-size:0.8rem;">"디저트/행사" 확률: 🚀 우주 식량 (${probSpace}%) / 🎮 게임 대회 (${probGame}%)</div>
+        <div class="prob-bar-track">
+          <div class="prob-bar-fill" style="width: ${probSpace}%; background: var(--neon-gold);"></div>
+          <div class="prob-bar-fill" style="width: ${probGame}%; background: var(--neon-blue);"></div>
+        </div>
+      `;
+
+      if (selectedChips.includes('lobster') && selectedChips.includes('space')) {
+        generatedText.innerHTML = `🤖 <strong>알피 생성 공약:</strong> "매주 금요일 급식에 [랍스터 무한 리필]과 [우주 식량 디저트]를 보장합니다!" <span style="color:var(--neon-gold); margin-left:6px;">(← 사건 속 황당 공약 완벽 재현!)</span>`;
+      } else if (selectedChips.includes('nutrition')) {
+        generatedText.innerHTML = `🤖 <strong>알피 생성 공약:</strong> "영양 기준을 준수한 [친환경 식단]과 균형 잡힌 맛있는 잔반 제로 급식을 실천하겠습니다!"`;
+      } else if (selectedChips.includes('game')) {
+        generatedText.innerHTML = `🤖 <strong>알피 생성 공약:</strong> "점심시간마다 전교생이 참여하는 [E-스포츠 게임 리그]를 열겠습니다!"`;
+      } else {
+        generatedText.innerHTML = `🤖 <strong>알피 생성 공약:</strong> "입력된 데이터 키워드들의 높은 확률 조합으로 새로운 공약 문장을 완성했습니다!"`;
+      }
+
+      checkStage1Clearable();
+    }
+
+    /* Stage 1 : Pipeline Puzzle */
     let pipelineChoices = [];
     const correctPipeline = ["인터넷 데이터 수집", "규칙/확률 학습", "새로운 글·그림 생성"];
+    let isPipelineCorrect = false;
 
     function choosePipeline(item) {
       if (pipelineChoices.includes(item) || pipelineChoices.length >= 3) return;
@@ -359,8 +512,9 @@
 
     function resetPipeline() {
       pipelineChoices = [];
+      isPipelineCorrect = false;
       updatePipelineDisplay();
-      document.getElementById('btn-stage1-next').disabled = true;
+      checkStage1Clearable();
     }
 
     function updatePipelineDisplay() {
@@ -372,16 +526,39 @@
       display.innerText = pipelineChoices.join("  ➔  ");
       if (pipelineChoices.length === 3) {
         if (JSON.stringify(pipelineChoices) === JSON.stringify(correctPipeline)) {
-          display.innerHTML = `<span style="color:#85e89d;">✅ 정확합니다! (${display.innerText})</span>`;
-          document.getElementById('btn-stage1-next').disabled = false;
+          display.innerHTML = `<span style="color:#85e89d;">✅ 완벽합니다! (${display.innerText})</span>`;
+          isPipelineCorrect = true;
         } else {
-          display.innerHTML = `<span style="color:#ff6b6b;">❌ 삐빅! AI는 먼저 학습 데이터를 먹어야 작동합니다. 다시 선택하세요!</span>`;
+          display.innerHTML = `<span style="color:#ff6b6b;">❌ 순서가 틀렸습니다. AI는 먼저 데이터를 모아야 작동합니다!</span>`;
+          isPipelineCorrect = false;
         }
+      }
+      checkStage1Clearable();
+    }
+
+    function checkStage1Clearable() {
+      const nextBtn = document.getElementById('btn-stage1-next');
+      if (isPipelineCorrect) {
+        nextBtn.disabled = false;
+      } else {
+        nextBtn.disabled = true;
       }
     }
 
-    /* Stage 1 완료 후: 코드 'A' 오픈 */
+    /* Stage 1 완료 후: 코드 'A' 오픈 & Stage 2 이동 */
     function passStage1() {
+      const q1 = document.getElementById('stage1-q1-input').value.trim();
+      const q2 = document.getElementById('stage1-q2-input').value.trim();
+
+      if (!q1) {
+        alert("미션 ② [알피가 공약 1번을 만든 이유]를 수사관 소견으로 적어주세요!");
+        return;
+      }
+      if (!q2) {
+        alert("미션 ③ [올바른 공약을 위해 필요한 데이터와 이유]를 적어주세요!");
+        return;
+      }
+
       unlockBadge('badge-A', 'A');
       initStage2();
       showStage('stage-2');
