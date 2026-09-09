@@ -11,6 +11,7 @@
       --neon-blue: #00d2ff;
       --neon-gold: #ffd200;
       --neon-red: #ff3366;
+      --neon-green: #38b000;
       --text-main: #f0f6fc;
       --text-muted: #8b9bb4;
       --card-bg: #1b2a4e;
@@ -25,7 +26,7 @@
     .agent-info { font-size: 0.95rem; font-weight: bold; color: var(--neon-blue); }
     .clue-slots { display: flex; gap: 8px; }
     
-    /* Clue Badge - Initial Hidden State */
+    /* Clue Badge */
     .clue-badge { width: 36px; height: 36px; border-radius: 8px; border: 2px dashed #2f4370; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 1rem; color: #435b88; background: rgba(0,0,0,0.4); transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
     .clue-badge.unlocked { border: 2px solid var(--neon-gold); color: #000; background: var(--neon-gold); box-shadow: 0 0 15px var(--neon-gold); transform: scale(1.1); }
 
@@ -46,7 +47,7 @@
     .speaker-alpi { color: var(--neon-blue); }
     .dialogue-text { font-size: 0.95rem; line-height: 1.45; color: var(--text-main); }
 
-    /* Stage 0 Evaluation Form */
+    /* Forms & Inputs */
     .eval-box { background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(0, 210, 255, 0.2); border-radius: 10px; padding: 14px; margin: 12px 0; }
     .eval-title { font-size: 0.9rem; color: var(--neon-gold); font-weight: bold; margin-bottom: 8px; }
     .risk-meter { display: flex; gap: 8px; justify-content: space-between; margin-bottom: 12px; }
@@ -58,6 +59,13 @@
     .btn-yellow { background: #e0a96d; color: #111; }
     .btn-lightgreen { background: #70e000; color: #111; }
     .btn-green { background: #38b000; }
+
+    .btn { background: var(--neon-blue); color: #051329; border: none; border-radius: 8px; padding: 12px 24px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; text-align: center; }
+    .btn:hover { background: #5ce1e6; box-shadow: 0 0 12px var(--neon-blue); transform: translateY(-2px); }
+    .btn:disabled { background: #3a475d; color: #718096; cursor: not-allowed; box-shadow: none; transform: none; }
+    
+    .input-box { width: 100%; padding: 10px 14px; border-radius: 8px; border: 1.5px solid var(--border-color); background: #0c1833; color: #fff; font-size: 0.95rem; outline: none; margin-bottom: 8px; }
+    .input-box:focus { border-color: var(--neon-blue); box-shadow: 0 0 8px var(--neon-blue); }
 
     /* Stage 1 Simulator Styles */
     .sim-container { background: rgba(0, 0, 0, 0.35); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; margin: 12px 0; }
@@ -72,30 +80,33 @@
     .prob-display-box { background: #0a1122; border-radius: 8px; padding: 10px; margin: 10px 0; border: 1px solid rgba(255, 210, 0, 0.2); }
     .prob-bar-track { background: #16223d; border-radius: 6px; height: 16px; width: 100%; overflow: hidden; margin: 4px 0 8px; display: flex; }
     .prob-bar-fill { height: 100%; transition: width 0.4s ease; }
-    
     .generated-speech { background: rgba(255, 210, 0, 0.1); border-left: 3px solid var(--neon-gold); padding: 8px 12px; border-radius: 4px; font-size: 0.9rem; color: #fff; margin-top: 8px; min-height: 38px; display: flex; align-items: center; }
-    .stage1-written-task { background: rgba(0, 0, 0, 0.25); border: 1px solid rgba(0, 210, 255, 0.2); border-radius: 10px; padding: 14px; margin-top: 14px; }
-
-    /* Interactive Elements */
-    .btn { background: var(--neon-blue); color: #051329; border: none; border-radius: 8px; padding: 12px 24px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.2s; text-align: center; }
-    .btn:hover { background: #5ce1e6; box-shadow: 0 0 12px var(--neon-blue); transform: translateY(-2px); }
-    .btn:disabled { background: #3a475d; color: #718096; cursor: not-allowed; box-shadow: none; transform: none; }
     
-    .input-box { width: 100%; padding: 10px 14px; border-radius: 8px; border: 1.5px solid var(--border-color); background: #0c1833; color: #fff; font-size: 0.95rem; outline: none; margin-bottom: 10px; }
-    .input-box:focus { border-color: var(--neon-blue); box-shadow: 0 0 8px var(--neon-blue); }
-
-    /* Puzzle / Documents */
-    .puzzle-grid { display: flex; gap: 10px; margin: 15px 0; justify-content: center; flex-wrap: wrap; }
-    .puzzle-card { padding: 12px 16px; background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.9rem; transition: 0.2s; user-select: none; }
+    .puzzle-grid { display: flex; gap: 10px; margin: 12px 0; justify-content: center; flex-wrap: wrap; }
+    .puzzle-card { padding: 10px 14px; background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 0.85rem; transition: 0.2s; user-select: none; }
     .puzzle-card:hover { border-color: var(--neon-gold); }
-    .puzzle-slot-display { min-height: 44px; border-radius: 8px; border: 1px dashed var(--neon-blue); display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.95rem; color: var(--neon-gold); margin-bottom: 12px; background: rgba(0,0,0,0.2); }
+    .puzzle-slot-display { min-height: 40px; border-radius: 8px; border: 1px dashed var(--neon-blue); display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem; color: var(--neon-gold); margin-bottom: 10px; background: rgba(0,0,0,0.2); }
 
-    .classifier-arena { display: flex; gap: 15px; margin: 15px 0; }
-    .target-zone { flex: 1; border: 2px dashed var(--border-color); border-radius: 10px; padding: 15px; min-height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: rgba(0,0,0,0.2); cursor: pointer; transition: 0.2s; }
-    .target-zone:hover { background: rgba(0, 210, 255, 0.1); border-color: var(--neon-blue); }
-    .target-zone h4 { margin-bottom: 6px; font-size: 0.95rem; color: var(--neon-blue); }
-    .action-card-current { background: #243b6b; border: 2px solid var(--neon-gold); padding: 12px 18px; border-radius: 8px; text-align: center; font-weight: bold; margin-bottom: 10px; }
+    /* Stage 2 New Styles: Dual Columns & Ethics */
+    .compare-container { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 12px 0; }
+    .compare-card { background: rgba(12, 22, 45, 0.8); border: 1.5px solid var(--border-color); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between; }
+    .compare-card.bad { border-color: rgba(255, 51, 102, 0.5); }
+    .compare-card.good { border-color: rgba(0, 210, 255, 0.5); }
+    .compare-tag { font-size: 0.8rem; font-weight: 900; padding: 3px 8px; border-radius: 4px; display: inline-block; margin-bottom: 6px; width: fit-content; }
+    .tag-bad { background: rgba(255, 51, 102, 0.2); color: #ff6b6b; border: 1px solid var(--neon-red); }
+    .tag-good { background: rgba(0, 210, 255, 0.2); color: var(--neon-blue); border: 1px solid var(--neon-blue); }
+    
+    .chat-bubble { background: rgba(0,0,0,0.3); border-radius: 8px; padding: 10px; font-size: 0.85rem; line-height: 1.45; margin-bottom: 8px; }
+    .output-bubble { background: rgba(255, 210, 0, 0.08); border-left: 3px solid var(--neon-gold); padding: 8px 10px; font-size: 0.85rem; border-radius: 4px; min-height: 52px; }
 
+    .pledge-list { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
+    .pledge-item { display: flex; align-items: flex-start; gap: 10px; background: rgba(0,0,0,0.25); border: 1px solid #2a3d66; padding: 10px; border-radius: 8px; font-size: 0.85rem; line-height: 1.4; cursor: pointer; user-select: none; }
+    .pledge-item input { margin-top: 3px; cursor: pointer; }
+    .stamp-box { text-align: center; margin: 10px 0; min-height: 55px; }
+    .stamp-mark { display: inline-block; border: 3px double var(--neon-gold); color: var(--neon-gold); font-weight: 900; font-size: 1.05rem; padding: 6px 18px; border-radius: 6px; transform: rotate(-3deg); animation: stampIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+    @keyframes stampIn { from { opacity: 0; transform: scale(2) rotate(15deg); } to { opacity: 1; transform: scale(1) rotate(-3deg); } }
+
+    /* Stage 3 & 4 Styles */
     .document-paper { background: #fdfdfd; color: #111; border-radius: 8px; padding: 16px; line-height: 1.8; margin-bottom: 15px; font-size: 0.95rem; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
     .clickable-phrase { background: rgba(255, 51, 102, 0.15); border-bottom: 2px dashed var(--neon-red); cursor: pointer; padding: 2px 4px; border-radius: 4px; transition: 0.2s; font-weight: bold; }
     .clickable-phrase:hover { background: rgba(255, 51, 102, 0.35); }
@@ -119,7 +130,7 @@
 </head>
 <body>
 
-  <!-- Top HUD Bar: 처음엔 '?' 로 잠겨있음 -->
+  <!-- Top HUD Bar -->
   <div id="hud">
     <div class="agent-info">🕵️ 수사관: <span id="hud-agent-name">미등록 요원</span></div>
     <div class="clue-slots">
@@ -143,7 +154,6 @@
         <div class="dialogue-text">"수사관님! 부회장 당선되려고 알피가 써준 공약을 그대로 냈는데... 전교생이 비웃고 선생님이 교무실로 부르셨어요! 제발 도와주세요!"</div>
       </div>
 
-      <!-- 탐구 인터랙션 1: 5단계 위험도 신호등 -->
       <div class="eval-box">
         <div class="eval-title">📊 수사관 초기 평가 ① : 나복사의 공약 위험도는 몇 단계인가요?</div>
         <div class="risk-meter">
@@ -156,7 +166,6 @@
         <div id="risk-feedback" style="font-size: 0.85rem; color: var(--neon-blue); text-align: center; min-height: 18px;"></div>
       </div>
 
-      <!-- 탐구 인터랙션 2: 초기 발견 문제점 및 서명 -->
       <div class="eval-box">
         <div class="eval-title">🔍 수사관 초기 평가 ② : 벽보에서 가장 이상하거나 의심스러운 점은?</div>
         <input type="text" id="agent-doubt-input" class="input-box" placeholder="예: 랍스터 급식이 거짓말 같아요 / 성별을 나누는 게 이상해요 등">
@@ -175,15 +184,16 @@
   <div class="stage-container" id="stage-1">
     <div>
       <div class="visual-frame">
-  <img src="images/stage1_pipeline.png" alt="원리 분석" onclick="openModal(this.src)">
-</div>
+        <div class="placeholder-fallback">⚙️ [images/stage1_pipeline.png]<br>데이터 공장 파이프라인 다이어그램</div>
+        <img src="images/stage1_pipeline.png" alt="원리 분석" onclick="openModal(this.src)" onerror="this.style.display='none'">
+      </div>
 
       <div class="dialogue-box">
         <div class="dialogue-speaker speaker-alpi">🤖 AI 매니저 알피</div>
         <div class="dialogue-text">"제가 어떤 원리를 통해 [급식 혁명]이라는 공약을 제시하게 되었을까요?"</div>
       </div>
 
-      <!-- 탐구 인터랙션 1: 데이터 주입 & 확률 생성 시뮬레이터 -->
+      <!-- 탐구 인터랙션 1: 데이터 주입 시뮬레이터 -->
       <div class="sim-container">
         <div style="font-size: 0.9rem; font-weight: bold; color: var(--neon-gold); margin-bottom: 6px;">
           🧪 수사 실험실: 알피의 두뇌에 학습 데이터 먹여보기
@@ -192,7 +202,6 @@
           인터넷 데이터 카드를 클릭하여 AI 학습 바구니에 담아보세요. (최대 3개)
         </p>
 
-        <!-- 데이터 카드 풀 -->
         <div class="data-cards-pool" id="data-pool">
           <div class="data-chip" onclick="toggleDataChip(this, 'lobster')">🦞 [맛집 블로그] "랍스터 버터구이 무한 리필 꿀팁"</div>
           <div class="data-chip" onclick="toggleDataChip(this, 'space')">🚀 [SF 영화 후기] "탐사선 우주 식량 캡슐 디저트"</div>
@@ -201,7 +210,6 @@
           <div class="data-chip" onclick="toggleDataChip(this, 'clean')">🧹 [생활 교육 지침] "급식 후 1인 1구역 깨끗한 분리배출"</div>
         </div>
 
-        <!-- 바구니 -->
         <div class="drop-basket" id="data-basket">
           <span class="basket-placeholder">위 카드를 클릭하여 학습 데이터를 채우세요 (최대 3개).</span>
         </div>
@@ -211,7 +219,6 @@
           <button type="button" class="btn" style="padding: 6px 14px; font-size: 0.85rem; background: #3a475d; color: #fff;" onclick="resetSimData()">🔄 데이터 초기화</button>
         </div>
 
-        <!-- 확률 시각화 및 생성 결과 -->
         <div class="prob-display-box" id="sim-result-box" style="display: none;">
           <div style="font-size: 0.82rem; color: var(--neon-blue); font-weight: bold;">📊 알피의 단어 연결 확률 분석 결과:</div>
           <div id="prob-bars-container"></div>
@@ -236,11 +243,11 @@
       </div>
 
       <!-- 탐구 인터랙션 3: 수사관 서술형 탐구 과제 -->
-      <div class="stage1-written-task">
+      <div class="eval-box">
         <div class="eval-title">미션 ②: [수사관 답변] 알피가 이런 공약 1번(급식 혁명)을 만들게 된 이유는 무엇인가요?</div>
         <input type="text" id="stage1-q1-input" class="input-box" placeholder="예: 인터넷 맛집과 우주 글 데이터를 그대로 학습해서 가장 확률 높은 단어를 이어붙였기 때문 등">
 
-        <div class="eval-title" style="margin-top: 10px;">미션 ③: AI의 원리를 활용해 '진짜 올바른 급식 공약'을 만들기 위해 필요한 데이터와 그 이유는?</div>
+        <div class="eval-title" style="margin-top: 10px;">미션 ③: AI 원리를 활용해 '진짜 올바른 급식 공약'을 만들기 위해 필요한 데이터와 그 이유는?</div>
         <input type="text" id="stage1-q2-input" class="input-box" placeholder="예: 학생들의 실제 선호도 설문과 학교 급식 예산 데이터가 필요하다. 실현 가능해야 하기 때문 등">
       </div>
     </div>
@@ -250,34 +257,121 @@
     </div>
   </div>
 
-  <!-- Stage 2: Brain Over-dependence -->
+  <!-- Stage 2: Brain Over-dependence (주체성·진정성·책임 윤리 실험실) -->
   <div class="stage-container" id="stage-2">
     <div>
       <div class="visual-frame">
         <div class="placeholder-fallback">🧠 [images/stage2_brain.png]<br>생각을 멈춘 뇌 vs 번쩍이는 컬러 뇌</div>
         <img src="images/stage2_brain.png" alt="과의존 분석" onclick="openModal(this.src)" onerror="this.style.display='none'">
       </div>
+
       <div class="dialogue-box">
-        <div class="dialogue-speaker speaker-boksa">😓 나복사 후보</div>
-        <div class="dialogue-text">"선생님이 공약 뜻이 뭐냐고 물어보셨는데... 알피가 다 써줘서 저도 무슨 말인지 하나도 모르겠더라고요..."</div>
+        <div class="dialogue-speaker speaker-boksa">😓 나복사 후보 긴급 고백</div>
+        <div class="dialogue-text">"알피가 버튼 한 번에 그럴듯한 말을 뚝딱 만들어주니까 제가 직접 생각할 필요가 없다고 착각했어요... 제 생각은 하나도 안 담긴 껍데기 공약이었던 거죠."</div>
       </div>
-      <p style="font-size: 0.95rem; color: var(--neon-gold); font-weight: bold; text-align: center; margin-bottom: 8px;">
-        미션: 아래 행동을 [스스로 먼저 고민(주인)]할 것인지 [AI 도움(도구)]받을 것인지 분류하세요!
-      </p>
-      <div id="card-question-box" class="action-card-current">행동 카드 로딩 중...</div>
-      <div class="classifier-arena">
-        <div class="target-zone" onclick="classifyAction('human')">
-          <h4>💡 스스로 먼저 고민하기</h4>
-          <p style="font-size: 0.8rem; color: var(--text-muted);">(인간이 주인이 되는 영역)</p>
+
+      <!-- 활동 1: 프롬프트 생성 비교 실험실 -->
+      <div class="eval-box">
+        <div class="eval-title">🧪 활동 ① : 질문 방식에 따른 AI 공약 비교 실험실</div>
+        <div class="compare-container">
+          <!-- 좌: 생각 없는 질문 -->
+          <div class="compare-card bad">
+            <div>
+              <span class="compare-tag tag-bad">방식 A: 생각 없는 나복사 방식</span>
+              <div class="chat-bubble">
+                💬 <strong>프롬프트 입력:</strong><br>"부회장 공약 멋진 거 아무거나 하나 써줘"
+              </div>
+              <button type="button" class="btn" style="padding: 6px 12px; font-size: 0.8rem; background: #e63946; color:#fff;" onclick="genLazyPrompt()">생각 없이 딸깍 생성 ➔</button>
+            </div>
+            <div class="output-bubble" id="lazy-prompt-output" style="margin-top: 8px;">
+              <small style="color: var(--text-muted);">버튼을 누르면 생성 결과가 표시됩니다.</small>
+            </div>
+          </div>
+
+          <!-- 우: 내 고민 담긴 질문 -->
+          <div class="compare-card good">
+            <div>
+              <span class="compare-tag tag-good">방식 B: 내 고민 먼저 담기 (수사관 방식)</span>
+              <div class="chat-bubble">
+                💬 <strong>수사관이 관찰한 우리 학교 문제 직접 쓰기:</strong>
+                <input type="text" id="agent-school-issue" class="input-box" style="margin-top:5px; font-size:0.85rem;" placeholder="예: 복도에서 너무 뛰어서 친구들이 다쳐요 / 화장실 쓰레기 등">
+              </div>
+              <button type="button" class="btn" style="padding: 6px 12px; font-size: 0.8rem;" onclick="genThoughtfulPrompt()">내 고민 바탕으로 AI 협업 생성 ➔</button>
+            </div>
+            <div class="output-bubble" id="thoughtful-prompt-output" style="margin-top: 8px;">
+              <small style="color: var(--text-muted);">문제를 입력하고 버튼을 누르세요.</small>
+            </div>
+          </div>
         </div>
-        <div class="target-zone" onclick="classifyAction('ai')">
-          <h4>🤖 AI에게 도움받기</h4>
-          <p style="font-size: 0.8rem; color: var(--text-muted);">(도구로 비판적 활용)</p>
+      </div>
+
+      <!-- 활동 2: 좌우 윤리 심층 분석 (진정성 vs 책임성) -->
+      <div class="eval-box">
+        <div class="eval-title">⚖️ 활동 ② : 공약의 두 얼굴 - 윤리적 결론 도출하기</div>
+        <div class="compare-container">
+          <!-- 좌측 패널: 진정성 -->
+          <div class="compare-card" style="border-color: rgba(255, 210, 0, 0.4);">
+            <div class="eval-title" style="color: var(--neon-gold); font-size: 0.85rem;">[A. 진정성 검증 (Authenticity)]</div>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">
+              친구들을 향한 내 진심과 고민이 담겨 있는가?
+            </p>
+            <div style="font-size: 0.8rem; line-height: 1.5; margin-bottom: 8px;">
+              • 나복사 공약 판정: <span style="color:#ff6b6b; font-weight:bold;">유권자 기만(위선)</span><br>
+              • 내 고민 공약 판정: <span style="color:#85e89d; font-weight:bold;">진정성 있는 약속</span>
+            </div>
+            <div style="margin-top: auto;">
+              <label style="font-size: 0.8rem; color: var(--neon-blue); font-weight:bold;">✍️ 진정성 관점의 윤리적 결론:</label>
+              <input type="text" id="stage2-ethics-q1" class="input-box" style="font-size: 0.8rem; margin-top:4px;" placeholder="예: 내 고민이 없으면 친구들을 속이는 거짓말이 되기 때문이다">
+            </div>
+          </div>
+
+          <!-- 우측 패널: 책임성 -->
+          <div class="compare-card" style="border-color: rgba(0, 210, 255, 0.4);">
+            <div class="eval-title" style="color: var(--neon-blue); font-size: 0.85rem;">[B. 책임성 검증 (Accountability)]</div>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">
+              문제가 생기거나 질문을 받았을 때 내가 책임질 수 있는가?
+            </p>
+            <div style="font-size: 0.8rem; line-height: 1.5; margin-bottom: 8px;">
+              • 나복사 공약 판정: <span style="color:#ff6b6b; font-weight:bold;">책임 회피(무책임)</span><br>
+              • 내 고민 공약 판정: <span style="color:#85e89d; font-weight:bold;">주체적 실천과 책임</span>
+            </div>
+            <div style="margin-top: auto;">
+              <label style="font-size: 0.8rem; color: var(--neon-gold); font-weight:bold;">✍️ 책임성 관점의 윤리적 결론:</label>
+              <input type="text" id="stage2-ethics-q2" class="input-box" style="font-size: 0.8rem; margin-top:4px;" placeholder="예: AI는 결과를 대신 책임져주지 않고 인간인 내가 져야 하기 때문이다">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 활동 3: AI 주체적 활용 3대 맹세 & 인장 도장 -->
+      <div class="eval-box">
+        <div class="eval-title">📜 활동 ③ : 수사관의 AI 주체적 활용 3대 윤리 서약</div>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
+          앞으로 AI를 올바르게 활용하기 위해 세 가지 약속을 꼼꼼히 읽고 모두 체크하세요.
+        </p>
+
+        <div class="pledge-list">
+          <label class="pledge-item">
+            <input type="checkbox" id="pledge-1" onchange="checkPledges()">
+            <span><strong>[주체성 맹세]</strong> AI에게 질문하기 전, 내가 해결하려는 문제와 생각을 최소 1분 이상 스스로 먼저 고민하겠습니다.</span>
+          </label>
+          <label class="pledge-item">
+            <input type="checkbox" id="pledge-2" onchange="checkPledges()">
+            <span><strong>[진정성 맹세]</strong> 뜻도 모르거나 내 진심이 담기지 않은 껍데기 AI 생성물로 친구와 선생님을 기만하지 않겠습니다.</span>
+          </label>
+          <label class="pledge-item">
+            <input type="checkbox" id="pledge-3" onchange="checkPledges()">
+            <span><strong>[책임성 맹세]</strong> AI가 도출한 내용을 비판적으로 검토하며, 최종 결과물에 대해서는 오직 '인간인 나'가 끝까지 책임지겠습니다.</span>
+          </label>
+        </div>
+
+        <div class="stamp-box" id="stamp-area">
+          <button type="button" class="btn" id="btn-stamp" style="font-size: 0.85rem; padding: 8px 18px;" disabled onclick="applyEthicStamp()">🔏 수사관 공식 윤리 인장 날인하기</button>
         </div>
       </div>
     </div>
-    <div style="text-align: right;">
-      <span id="stage2-score" style="font-size: 0.9rem; margin-right: 15px; color: var(--neon-blue);">진행: 0 / 3</span>
+
+    <div style="text-align: right; margin-top: 15px;">
       <button class="btn" id="btn-stage2-next" disabled onclick="passStage2()">🔍 수사 코드 조각 확보 ➔</button>
     </div>
   </div>
@@ -390,7 +484,7 @@
       document.getElementById('risk-feedback').innerText = `수사관 판정: [${desc}] 감지됨!`;
     }
 
-    /* Stage 0 -> 1 : 수사 시작 & 첫 번째 코드 'F' 오픈 */
+    /* Stage 0 -> 1 */
     function startInvestigation() {
       const nameVal = document.getElementById('agent-input-name').value.trim();
       const doubtVal = document.getElementById('agent-doubt-input').value.trim();
@@ -416,7 +510,7 @@
       showStage('stage-1');
     }
 
-    /* Stage 1 : AI Simulator Logic */
+    /* Stage 1 : Simulator */
     let selectedChips = [];
 
     function toggleDataChip(el, type) {
@@ -499,7 +593,7 @@
       checkStage1Clearable();
     }
 
-    /* Stage 1 : Pipeline Puzzle */
+    /* Stage 1 : Pipeline */
     let pipelineChoices = [];
     const correctPipeline = ["인터넷 데이터 수집", "규칙/확률 학습", "새로운 글·그림 생성"];
     let isPipelineCorrect = false;
@@ -545,7 +639,6 @@
       }
     }
 
-    /* Stage 1 완료 후: 코드 'A' 오픈 & Stage 2 이동 */
     function passStage1() {
       const q1 = document.getElementById('stage1-q1-input').value.trim();
       const q2 = document.getElementById('stage1-q2-input').value.trim();
@@ -560,45 +653,85 @@
       }
 
       unlockBadge('badge-A', 'A');
-      initStage2();
       showStage('stage-2');
     }
 
-    /* Stage 2 : Actions */
-    const stage2Actions = [
-      { text: "내 공약의 핵심 목표와 비전 결정하기", answer: "human" },
-      { text: "작성된 문장의 맞춤법을 더 매끄럽게 다듬기", answer: "ai" },
-      { text: "우리 학교 친구들이 겪는 진짜 불편 조사하기", answer: "human" }
-    ];
-    let currentActionIdx = 0;
-
-    function initStage2() {
-      currentActionIdx = 0;
-      updateStage2Card();
+    /* Stage 2 : Ethics Simulator & Pledges */
+    function genLazyPrompt() {
+      const box = document.getElementById('lazy-prompt-output');
+      box.innerHTML = `
+        <span style="color:#ff6b6b; font-weight:bold;">🚨 생성된 껍데기 공약:</span><br>
+        "차세대 메타버스 기반 AI 블록체인 등하교 드론 모빌리티 시스템 도입"<br>
+        <span style="color:var(--text-muted); font-size:0.75rem;">(진단: 본인도 무슨 뜻인지 모르는 100% 무책임 허세 공약 탄생)</span>
+      `;
     }
 
-    function updateStage2Card() {
-      if (currentActionIdx < stage2Actions.length) {
-        document.getElementById('card-question-box').innerText = `카드: "${stage2Actions[currentActionIdx].text}"`;
-        document.getElementById('stage2-score').innerText = `진행: ${currentActionIdx} / ${stage2Actions.length}`;
+    function genThoughtfulPrompt() {
+      const issue = document.getElementById('agent-school-issue').value.trim();
+      const box = document.getElementById('thoughtful-prompt-output');
+
+      if (!issue) {
+        alert("수사관님이 관찰한 우리 학교 문제점을 먼저 작성해 주세요!");
+        return;
+      }
+
+      let idea1 = "학생 자치 캠페인 및 안전 발자국 스티커 부착";
+      let idea2 = "학급 회의를 통한 상호 존중 칭찬 마일리지제 도입";
+
+      if (issue.includes("뛰") || issue.includes("복도") || issue.includes("다쳐")) {
+        idea1 = "복도 코너 '일단 멈춤' 발자국 스티커 부착 및 안전 지킴이 운영";
+        idea2 = "뛰지 않고 조용히 즐기는 복도 미니 보드게임 쉼터 존 마련";
+      } else if (issue.includes("쓰레기") || issue.includes("청소") || issue.includes("화장실")) {
+        idea1 = "구역별 1인 1책임 클린존 지정 및 환경 마일리지 적립";
+        idea2 = "화장실 입구 쓰레기 분리수거함 재배치 및 향기 캠페인";
+      } else if (issue.includes("싸움") || issue.includes("욕") || issue.includes("말")) {
+        idea1 = "칭찬과 바른 언어 사용 학급 대항 언어문화 챌린지";
+        idea2 = "친구 간 오해를 익명으로 푸는 '마음 우체통' 개설";
+      }
+
+      box.innerHTML = `
+        <span style="color:#85e89d; font-weight:bold;">💡 협업 생성된 진짜 공약:</span><br>
+        1. <strong>${idea1}</strong><br>
+        2. <strong>${idea2}</strong><br>
+        <span style="color:var(--neon-blue); font-size:0.75rem;">(진단: 수사관의 사전 고민("${issue}")을 바탕으로 실현 가능한 아이디어 도출 성공!)</span>
+      `;
+    }
+
+    function checkPledges() {
+      const p1 = document.getElementById('pledge-1').checked;
+      const p2 = document.getElementById('pledge-2').checked;
+      const p3 = document.getElementById('pledge-3').checked;
+      const stampBtn = document.getElementById('btn-stamp');
+
+      if (p1 && p2 && p3) {
+        stampBtn.disabled = false;
       } else {
-        document.getElementById('card-question-box').innerHTML = `<span style="color:#85e89d;">✅ 뇌 기능 정상 복구! 인간이 생각의 주인이 되어야 합니다.</span>`;
-        document.getElementById('stage2-score').innerText = `진행: 3 / 3 (완료)`;
-        document.getElementById('btn-stage2-next').disabled = false;
+        stampBtn.disabled = true;
       }
     }
 
-    function classifyAction(type) {
-      if (currentActionIdx >= stage2Actions.length) return;
-      if (stage2Actions[currentActionIdx].answer === type) {
-        currentActionIdx++;
-        updateStage2Card();
-      } else {
-        alert("삐빅! 다시 고민해 보세요. 사람이 먼저 결정해야 할까요, AI의 도움을 받을 부분일까요?");
+    let isStamped = false;
+
+    function applyEthicStamp() {
+      const q1 = document.getElementById('stage2-ethics-q1').value.trim();
+      const q2 = document.getElementById('stage2-ethics-q2').value.trim();
+
+      if (!q1) {
+        alert("활동 ②의 [A. 진정성 관점의 윤리적 결론]을 먼저 작성해 주세요!");
+        return;
       }
+      if (!q2) {
+        alert("활동 ②의 [B. 책임성 관점의 윤리적 결론]을 먼저 작성해 주세요!");
+        return;
+      }
+
+      isStamped = true;
+      const stampArea = document.getElementById('stamp-area');
+      stampArea.innerHTML = `<div class="stamp-mark">★ 주체적 인간 윤리 수사관 공인 인장 날인 완료 ★</div>`;
+      document.getElementById('btn-stage2-next').disabled = false;
+      alert("✅ 3대 서약과 윤리 결론이 승인되었습니다! 단서 코드 C를 확보하세요.");
     }
 
-    /* Stage 2 완료 후: 코드 'C' 오픈 */
     function passStage2() {
       unlockBadge('badge-C', 'C');
       showStage('stage-3');
@@ -614,7 +747,6 @@
       document.getElementById('btn-stage3-next').disabled = false;
     }
 
-    /* Stage 3 완료 후: 코드 'T' 오픈 */
     function passStage3() {
       unlockBadge('badge-T', 'T');
       showStage('stage-4');
@@ -641,7 +773,6 @@
       }
     }
 
-    /* Stage 4 완료 후: 코드 '!' 오픈 및 자격증 발급 */
     function passStage4() {
       unlockBadge('badge-EX', '!');
       document.getElementById('cert-agent-name').innerText = agentName;
@@ -649,7 +780,7 @@
       showStage('stage-final');
     }
 
-    /* 이미지 확대 모달 열기/닫기 */
+    /* Lightbox Modal */
     function openModal(imgSrc) {
       const modal = document.getElementById('imgModal');
       const modalImg = document.getElementById('modalImg');
