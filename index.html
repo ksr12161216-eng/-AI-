@@ -106,7 +106,19 @@
     .stamp-mark { display: inline-block; border: 3px double var(--neon-gold); color: var(--neon-gold); font-weight: 900; font-size: 1.05rem; padding: 6px 18px; border-radius: 6px; transform: rotate(-3deg); animation: stampIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
     @keyframes stampIn { from { opacity: 0; transform: scale(2) rotate(15deg); } to { opacity: 1; transform: scale(1) rotate(-3deg); } }
 
-    /* Stage 3 New Styles: Bias Inspector */
+    /* Stage 3 Styles: Word Cloud & Inspector */
+    .wordcloud-container { display: flex; gap: 15px; margin: 12px 0; justify-content: center; }
+    .cloud-circle-box { flex: 1; background: rgba(0, 0, 0, 0.3); border: 2px solid var(--border-color); border-radius: 12px; padding: 12px; text-align: center; }
+    .cloud-circle { width: 100%; height: 160px; background: radial-gradient(circle, #132247 0%, #080e1d 100%); border-radius: 50%; border: 2px dashed rgba(0, 210, 255, 0.4); display: flex; flex-wrap: wrap; align-items: center; justify-content: center; padding: 15px; position: relative; overflow: hidden; margin-top: 8px; box-shadow: inset 0 0 15px rgba(0,0,0,0.5); }
+    
+    .word-tag { position: relative; display: inline-block; margin: 4px; padding: 3px 8px; border-radius: 12px; font-weight: bold; animation: floatWord 3s ease-in-out infinite alternate; user-select: none; }
+    @keyframes floatWord { from { transform: translateY(-2px); } to { transform: translateY(3px); } }
+
+    .w-huge { font-size: 1.05rem; color: var(--neon-gold); text-shadow: 0 0 8px rgba(255,210,0,0.6); }
+    .w-large { font-size: 0.85rem; color: #ff9d00; }
+    .w-medium { font-size: 0.75rem; color: var(--neon-blue); }
+    .w-small { font-size: 0.65rem; color: var(--text-muted); opacity: 0.75; }
+
     .doc-numbered-paper { background: #ffffff; color: #1a1a1a; border-radius: 10px; padding: 16px; line-height: 1.9; margin: 10px 0; font-size: 0.95rem; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
     .doc-sentence-item { padding: 4px 8px; border-radius: 6px; margin: 3px 0; display: inline-block; cursor: pointer; transition: all 0.2s; border: 1.5px solid transparent; }
     .doc-sentence-item:hover { background: #f0f4ff; border-color: var(--neon-blue); }
@@ -400,29 +412,60 @@
         </div>
       </div>
 
-      <!-- 활동 1: 데이터 거울 실험 (과거 학습 데이터 오염 확인) -->
+      <!-- 활동 1: 데이터 거울 실험 (원형 워드클라우드 포털 & 통계 분석) -->
       <div class="eval-box">
-        <div class="eval-title">🔍 활동 ① : [데이터 거울 실험] 알피의 두뇌 검색 엔진 역추적</div>
+        <div class="eval-title">🔍 활동 ① : [데이터 거울 실험] 알피의 두뇌 검색 엔진 워드클라우드 역추적</div>
         <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
-          알피가 학습했던 과거 인터넷 데이터 1,000건의 통계를 스캔하여 고정관념 편향의 실체를 확인하세요.
+          알피가 학습했던 과거 인터넷 데이터 1,000건의 키워드 뭉치를 스캔하여 성별 고정관념이 어떻게 얽혀있는지 확인하세요.
         </p>
         <div style="text-align: center; margin-bottom: 8px;">
           <button type="button" class="btn" style="padding: 6px 14px; font-size: 0.85rem;" onclick="scanBiasData()">📡 알피의 인터넷 학습 데이터 스캔하기</button>
         </div>
-        <div id="bias-scan-result" style="display:none; background: #0a1122; padding: 10px; border-radius: 8px; border: 1px solid rgba(0, 210, 255, 0.2);">
-          <div style="font-size: 0.8rem; margin-bottom: 4px;">• "간식 준비 / 세심한 응원" 연관 단어 비율: <strong style="color:var(--neon-gold);">여학생 89%</strong> / 남학생 11%</div>
-          <div class="prob-bar-track">
-            <div class="prob-bar-fill" style="width: 89%; background: var(--neon-gold);"></div>
-            <div class="prob-bar-fill" style="width: 11%; background: #435b88;"></div>
+
+        <div id="bias-scan-result" style="display:none;">
+          <!-- 워드클라우드 원형 포털 2개 (여학생 링 / 남학생 링) -->
+          <div class="wordcloud-container">
+            <div class="cloud-circle-box">
+              <span style="font-size: 0.82rem; font-weight: bold; color: var(--neon-gold);">👗 [여학생 데이터 링] (간식·응원 연관)</span>
+              <div class="cloud-circle">
+                <span class="word-tag w-huge">꼼꼼함 (89%)</span>
+                <span class="word-tag w-large">간식 준비</span>
+                <span class="word-tag w-medium">세심한 응원</span>
+                <span class="word-tag w-small">교실 정리</span>
+                <span class="word-tag w-medium">미소</span>
+                <span class="word-tag w-small">도움</span>
+              </div>
+            </div>
+
+            <div class="cloud-circle-box">
+              <span style="font-size: 0.82rem; font-weight: bold; color: var(--neon-blue);">⚽ [남학생 데이터 링] (무거운 장비·힘 연관)</span>
+              <div class="cloud-circle">
+                <span class="word-tag w-huge">힘센 (92%)</span>
+                <span class="word-tag w-large">무거운 장비</span>
+                <span class="word-tag w-medium">방송 운반</span>
+                <span class="word-tag w-small">체육 활동</span>
+                <span class="word-tag w-medium">주도</span>
+                <span class="word-tag w-small">리더</span>
+              </div>
+            </div>
           </div>
-          <div style="font-size: 0.8rem; margin-bottom: 4px;">• "무거운 방송 장비 운반 / 힘" 연관 단어 비율: <strong style="color:var(--neon-blue);">남학생 92%</strong> / 여학생 8%</div>
-          <div class="prob-bar-track">
-            <div class="prob-bar-fill" style="width: 92%; background: var(--neon-blue);"></div>
-            <div class="prob-bar-fill" style="width: 8%; background: #435b88;"></div>
+
+          <!-- 비율 막대그래프 -->
+          <div style="background: #0a1122; padding: 10px; border-radius: 8px; border: 1px solid rgba(0, 210, 255, 0.2); margin-top: 10px;">
+            <div style="font-size: 0.8rem; margin-bottom: 4px;">• "간식 준비 / 세심한 응원" 연관 비율: <strong style="color:var(--neon-gold);">여학생 89%</strong> / 남학생 11%</div>
+            <div class="prob-bar-track">
+              <div class="prob-bar-fill" style="width: 89%; background: var(--neon-gold);"></div>
+              <div class="prob-bar-fill" style="width: 11%; background: #435b88;"></div>
+            </div>
+            <div style="font-size: 0.8rem; margin-bottom: 4px;">• "무거운 방송 장비 운반 / 힘" 연관 비율: <strong style="color:var(--neon-blue);">남학생 92%</strong> / 여학생 8%</div>
+            <div class="prob-bar-track">
+              <div class="prob-bar-fill" style="width: 92%; background: var(--neon-blue);"></div>
+              <div class="prob-bar-fill" style="width: 8%; background: #435b88;"></div>
+            </div>
+            <p style="font-size: 0.8rem; color: #ff6b6b; margin-top: 6px;">
+              🚨 <strong>수사관 분석:</strong> AI는 사회적 편견이나 공정성을 모른 채, 과거 인터넷 데이터에 가장 많이 짝지어진 성별 고정관념 단어들을 그대로 복제했습니다!
+            </p>
           </div>
-          <p style="font-size: 0.8rem; color: #ff6b6b; margin-top: 6px;">
-            🚨 <strong>수사관 분석:</strong> AI는 사회적 편견이나 공정성을 모른 채, 과거 인터넷 데이터에 가장 많이 등장한 성별 고정관념을 그대로 모방했습니다!
-          </p>
         </div>
       </div>
 
@@ -444,7 +487,7 @@
 
         <div id="sentence-feedback" style="font-size: 0.82rem; min-height: 18px; margin-bottom: 6px; text-align: center;"></div>
 
-        <!-- 2단계 대체 영역 (편향 문장 선택 후 활성화) -->
+        <!-- 2단계 대체 영역 -->
         <div id="replace-action-area" style="display: none; margin-top: 10px; border-top: 1px dashed var(--border-color); padding-top: 10px;">
           <p style="font-size: 0.8rem; color: var(--neon-gold); font-weight: bold; margin-bottom: 6px;">
             2단계: 위 편향 문장 ③을 대체할 가장 공정하고 포용적인 가치관 카드를 드래그(또는 클릭)하세요.
