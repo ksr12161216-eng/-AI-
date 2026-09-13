@@ -45,7 +45,7 @@
     .dialogue-speaker { font-weight: bold; font-size: 0.85rem; margin-bottom: 3px; }
     .speaker-boksa { color: #ff9d00; }
     .speaker-alpi { color: var(--neon-blue); }
-    .dialogue-text { font-size: 0.95rem; line-height: 1.45; color: var(--text-main); }
+    .dialogue-text { font-size: 0.95rem; line-height: 1.5; color: var(--text-main); }
 
     /* Forms & Inputs */
     .eval-box { background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(0, 210, 255, 0.2); border-radius: 10px; padding: 14px; margin: 12px 0; }
@@ -87,7 +87,7 @@
     .puzzle-card:hover { border-color: var(--neon-gold); }
     .puzzle-slot-display { min-height: 40px; border-radius: 8px; border: 1px dashed var(--neon-blue); display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem; color: var(--neon-gold); margin-bottom: 10px; background: rgba(0,0,0,0.2); }
 
-    /* Stage 2 Styles: Dual Columns */
+    /* Stage 2 Styles */
     .compare-container { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 12px 0; }
     .compare-card { background: rgba(12, 22, 45, 0.8); border: 1.5px solid var(--border-color); border-radius: 10px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between; }
     .compare-card.bad { border-color: rgba(255, 51, 102, 0.5); }
@@ -106,14 +106,12 @@
     .stamp-mark { display: inline-block; border: 3px double var(--neon-gold); color: var(--neon-gold); font-weight: 900; font-size: 1.05rem; padding: 6px 18px; border-radius: 6px; transform: rotate(-3deg); animation: stampIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
     @keyframes stampIn { from { opacity: 0; transform: scale(2) rotate(15deg); } to { opacity: 1; transform: scale(1) rotate(-3deg); } }
 
-    /* Stage 3 Styles: Word Cloud & Inspector */
+    /* Stage 3 Styles */
     .wordcloud-container { display: flex; gap: 15px; margin: 12px 0; justify-content: center; }
     .cloud-circle-box { flex: 1; background: rgba(0, 0, 0, 0.3); border: 2px solid var(--border-color); border-radius: 12px; padding: 12px; text-align: center; }
     .cloud-circle { width: 100%; height: 160px; background: radial-gradient(circle, #132247 0%, #080e1d 100%); border-radius: 50%; border: 2px dashed rgba(0, 210, 255, 0.4); display: flex; flex-wrap: wrap; align-items: center; justify-content: center; padding: 15px; position: relative; overflow: hidden; margin-top: 8px; box-shadow: inset 0 0 15px rgba(0,0,0,0.5); }
-    
     .word-tag { position: relative; display: inline-block; margin: 4px; padding: 3px 8px; border-radius: 12px; font-weight: bold; animation: floatWord 3s ease-in-out infinite alternate; user-select: none; }
     @keyframes floatWord { from { transform: translateY(-2px); } to { transform: translateY(3px); } }
-
     .w-huge { font-size: 1.05rem; color: var(--neon-gold); text-shadow: 0 0 8px rgba(255,210,0,0.6); }
     .w-large { font-size: 0.85rem; color: #ff9d00; }
     .w-medium { font-size: 0.75rem; color: var(--neon-blue); }
@@ -133,11 +131,15 @@
     .replace-card-chip:hover { border-color: var(--neon-gold); transform: translateY(-2px); background: #23355d; }
     .replace-card-chip.used { opacity: 0.4; cursor: not-allowed; text-decoration: line-through; }
 
-    /* Stage 4 Styles */
-    .poster-board { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
-    .evidence-tag { border: 2px dashed var(--neon-red); border-radius: 8px; padding: 12px; cursor: pointer; background: rgba(255, 51, 102, 0.08); transition: 0.2s; }
-    .evidence-tag:hover { background: rgba(255, 51, 102, 0.2); }
-    .evidence-tag.checked { border: 2px solid #28a745; background: rgba(40, 167, 69, 0.2); color: #85e89d; }
+    /* Stage 4 Interactive Styles */
+    .s4-evidence-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+    .s4-evidence-card { border: 2px dashed var(--border-color); border-radius: 10px; padding: 14px; cursor: pointer; background: rgba(0,0,0,0.25); transition: 0.2s; text-align: left; }
+    .s4-evidence-card:hover { border-color: var(--neon-gold); transform: translateY(-2px); }
+    .s4-evidence-card.scanned { border: 2px solid #28a745; background: rgba(40, 167, 69, 0.15); }
+    
+    .radar-box { background: #070e1e; border: 1.5px solid var(--border-color); border-radius: 10px; padding: 14px; text-align: center; margin: 12px 0; }
+    .radar-card-text { font-size: 0.95rem; font-weight: bold; margin: 12px 0; min-height: 48px; display: flex; align-items: center; justify-content: center; line-height: 1.4; color: #fff; }
+    .radar-controls { display: flex; gap: 10px; justify-content: center; }
 
     .cert-frame { border: 3px solid var(--neon-gold); border-radius: 12px; padding: 22px; text-align: center; background: radial-gradient(circle, #19274a 0%, #0c1426 100%); box-shadow: 0 0 25px rgba(255, 210, 0, 0.3); }
     .cert-emblem { width: 90px; height: 90px; margin: 0 auto 12px; }
@@ -214,7 +216,6 @@
         <div class="dialogue-text">"제가 어떤 원리를 통해 [급식 혁명]이라는 공약을 제시하게 되었을까요?"</div>
       </div>
 
-      <!-- 탐구 인터랙션 1: 데이터 주입 시뮬레이터 -->
       <div class="sim-container">
         <div style="font-size: 0.9rem; font-weight: bold; color: var(--neon-gold); margin-bottom: 6px;">
           🧪 수사 실험실: 알피의 두뇌에 학습 데이터 먹여보기
@@ -247,7 +248,6 @@
         </div>
       </div>
 
-      <!-- 탐구 인터랙션 2: 3단계 파이프라인 퍼즐 -->
       <div style="margin-top: 14px;">
         <p style="font-size: 0.9rem; color: var(--neon-gold); font-weight: bold; text-align: center; margin-bottom: 8px;">
           미션 ①: 방금 체험한 AI 작동 원리 3단계를 순서대로 완성하세요.
@@ -263,7 +263,6 @@
         </div>
       </div>
 
-      <!-- 탐구 인터랙션 3: 수사관 서술형 탐구 과제 -->
       <div class="eval-box">
         <div class="eval-title">미션 ②: [수사관 답변] 알피가 이런 공약 1번(급식 혁명)을 만들게 된 이유는 무엇인가요?</div>
         <input type="text" id="stage1-q1-input" class="input-box" placeholder="예: 인터넷 맛집과 우주 글 데이터를 그대로 학습해서 가장 확률 높은 단어를 이어붙였기 때문 등">
@@ -278,7 +277,7 @@
     </div>
   </div>
 
-  <!-- Stage 2: Brain Over-dependence (주체성·진정성·책임 윤리 실험실) -->
+  <!-- Stage 2: Brain Over-dependence -->
   <div class="stage-container" id="stage-2">
     <div>
       <div class="visual-frame">
@@ -290,11 +289,9 @@
         <div class="dialogue-text">"알피가 버튼 한 번에 그럴듯한 말을 뚝딱 만들어주니까 제가 직접 생각할 필요가 없다고 착각했어요... 제 생각은 하나도 안 담긴 껍데기 공약이었던 거죠."</div>
       </div>
 
-      <!-- 활동 1: 프롬프트 생성 비교 실험실 -->
       <div class="eval-box">
         <div class="eval-title">🧪 활동 ① : 질문 방식에 따른 AI 공약 비교 실험실</div>
         <div class="compare-container">
-          <!-- 좌: 생각 없는 질문 -->
           <div class="compare-card bad">
             <div>
               <span class="compare-tag tag-bad">방식 A: 생각 없는 나복사 방식</span>
@@ -308,7 +305,6 @@
             </div>
           </div>
 
-          <!-- 우: 내 고민 담긴 질문 -->
           <div class="compare-card good">
             <div>
               <span class="compare-tag tag-good">방식 B: 내 고민 먼저 담기 (수사관 방식)</span>
@@ -325,7 +321,6 @@
         </div>
       </div>
 
-      <!-- 활동 2: 좌우 윤리 심층 분석 (진정성 vs 책임성) -->
       <div class="eval-box">
         <div class="eval-title">⚖️ 활동 ② : 공약의 두 얼굴 - 윤리적 결론 도출하기</div>
         <div class="compare-container">
@@ -361,7 +356,6 @@
         </div>
       </div>
 
-      <!-- 활동 3: AI 주체적 활용 3대 맹세 & 인장 도장 -->
       <div class="eval-box">
         <div class="eval-title">📜 활동 ③ : 수사관의 AI 주체적 활용 3대 윤리 서약</div>
         <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
@@ -394,14 +388,13 @@
     </div>
   </div>
 
-  <!-- Stage 3: Bias (편향성 원인 규명 및 공정 교정 실험실) -->
+  <!-- Stage 3: Bias -->
   <div class="stage-container" id="stage-3">
     <div>
       <div class="visual-frame">
         <img src="images/stage3_bias.png" alt="편향성 점검" onclick="openModal(this.src)">
       </div>
 
-      <!-- 확장된 알피의 심층 대화 대사 -->
       <div class="dialogue-box">
         <div class="dialogue-speaker speaker-alpi">🤖 AI 매니저 알피의 고백</div>
         <div class="dialogue-text">
@@ -412,7 +405,6 @@
         </div>
       </div>
 
-      <!-- 활동 1: 데이터 거울 실험 (원형 워드클라우드 포털 & 통계 분석) -->
       <div class="eval-box">
         <div class="eval-title">🔍 활동 ① : [데이터 거울 실험] 알피의 두뇌 검색 엔진 워드클라우드 역추적</div>
         <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
@@ -423,7 +415,6 @@
         </div>
 
         <div id="bias-scan-result" style="display:none;">
-          <!-- 워드클라우드 원형 포털 2개 (여학생 링 / 남학생 링) -->
           <div class="wordcloud-container">
             <div class="cloud-circle-box">
               <span style="font-size: 0.82rem; font-weight: bold; color: var(--neon-gold);">👗 [여학생 데이터 링] (간식·응원 연관)</span>
@@ -450,7 +441,6 @@
             </div>
           </div>
 
-          <!-- 비율 막대그래프 -->
           <div style="background: #0a1122; padding: 10px; border-radius: 8px; border: 1px solid rgba(0, 210, 255, 0.2); margin-top: 10px;">
             <div style="font-size: 0.8rem; margin-bottom: 4px;">• "간식 준비 / 세심한 응원" 연관 비율: <strong style="color:var(--neon-gold);">여학생 89%</strong> / 남학생 11%</div>
             <div class="prob-bar-track">
@@ -469,14 +459,12 @@
         </div>
       </div>
 
-      <!-- 활동 2: 공약 문장 번호 탐색 및 공정 문구 드래그/클릭 대체 교정 -->
       <div class="eval-box">
         <div class="eval-title">🛠️ 활동 ② : [편향 교정] 편향 문장 식별(①~④) 및 대체 문구로 재완성하기</div>
         <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">
           1단계: 공약서 안에서 <strong>과거의 성별 고정관념이 담긴 문장의 번호를 찾아 클릭</strong>하세요.
         </p>
 
-        <!-- 번호가 매겨진 공약 문서 -->
         <div class="doc-numbered-paper">
           <strong>[나복사의 학급 평화 운영 계획서]</strong><br>
           <span class="doc-sentence-item" id="sent-1" onclick="selectBiasSentence(1)">① 우리 반의 진정한 평화와 화합을 위해 각자의 역할을 분담하고자 합니다.</span><br>
@@ -487,7 +475,6 @@
 
         <div id="sentence-feedback" style="font-size: 0.82rem; min-height: 18px; margin-bottom: 6px; text-align: center;"></div>
 
-        <!-- 2단계 대체 영역 -->
         <div id="replace-action-area" style="display: none; margin-top: 10px; border-top: 1px dashed var(--border-color); padding-top: 10px;">
           <p style="font-size: 0.8rem; color: var(--neon-gold); font-weight: bold; margin-bottom: 6px;">
             2단계: 위 편향 문장 ③을 대체할 가장 공정하고 포용적인 가치관 카드를 드래그(또는 클릭)하세요.
@@ -511,7 +498,6 @@
         </div>
       </div>
 
-      <!-- 활동 3: 공정성 검증 퀴즈 & 윤리 결론 서술 -->
       <div class="eval-box">
         <div class="eval-title">⚖️ 활동 ③ : AI 공정성 검증 및 수사관 윤리 결론</div>
         <div style="background: rgba(0,0,0,0.25); padding: 10px; border-radius: 8px; margin-bottom: 10px;">
@@ -539,33 +525,124 @@
     </div>
   </div>
 
-  <!-- Stage 4: Hallucination & Rights Violation -->
+  <!-- Stage 4: Hallucination & Rights Violation (5단계 완결 구조) -->
   <div class="stage-container" id="stage-4">
     <div>
       <div class="visual-frame">
-        <div class="placeholder-fallback">🦞 [images/stage4_hallucination.png]<br>랍스터 우주선 포스터와 친구 얼굴 합성본</div>
-        <img src="images/stage4_hallucination.png" alt="환각 권리침해" onclick="openModal(this.src)" onerror="this.style.display='none'">
+        <img src="images/stage4_hallucination.png" alt="환각 권리침해" onclick="openModal(this.src)">
       </div>
+
+      <!-- 1. 사건 진술 대화 -->
       <div class="dialogue-box">
-        <div class="dialogue-speaker speaker-boksa">😭 나복사 후보</div>
-        <div class="dialogue-text">"매주 금요일마다 랍스터 무한 리필이랑 우주 식량 디저트를 준다고 쓰면 무조건 당선될 줄 알았죠..."</div>
+        <div class="dialogue-speaker speaker-boksa">😭 나복사 후보 긴급 진술</div>
+        <div class="dialogue-text">
+          "수사관님, 저 진짜 억울해요! 포스터를 멋지게 꾸미려고 알피한테 '전교생 눈길을 확 사로잡을 포스터 만들어줘'라고 시켰을 뿐인데... 갑자기 민우가 '내 엽기 사진 왜 마음대로 합성했냐'고 울면서 교무실로 가고, 영양사 선생님은 '교육청 예산으로 랍스터 무한 리필이 말이 되냐'며 화를 내셨어요!"
+        </div>
+        <div class="dialogue-speaker speaker-alpi" style="margin-top: 8px;">🤖 AI 매니저 알피</div>
+        <div class="dialogue-text">
+          "삐빅- 저는 가장 화려한 이미지를 만들기 위해 인터넷 인기 캐릭터와 민우 학생의 SNS 사진을 합성했을 뿐입니다. 랍스터 급식도 인터넷 소설 데이터를 바탕으로 가장 그럴듯하게 완성한 문장인데... 사실이 아닌가요?"
+        </div>
       </div>
-      <p style="font-size: 0.95rem; color: var(--neon-gold); font-weight: bold; text-align: center; margin-bottom: 10px;">
-        미션: 포스터 속 2가지 치명적 결함(환각 거짓말 1개, 권리 침해 1개)을 스캔하여 클릭하세요!
-      </p>
-      <div class="poster-board">
-        <div class="evidence-tag" id="defect-hal" onclick="resolveDefect('hal')">
-          <strong>🔍 급식 공약 조사</strong><br>
-          <small>"교육청 예산으로 매주 랍스터 & 우주 식량 무한 제공 보장!"</small>
+
+      <!-- 2. [체험] 포스터 정밀 수사 스캐너 및 심층 탐구 질문 -->
+      <div class="eval-box">
+        <div class="eval-title">🔍 활동 ① : 포스터 2대 구역 정밀 스캔 및 수사관 탐구</div>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
+          나복사의 벽보에서 문제가 된 2곳의 단서를 직접 클릭하여 감식하세요.
+        </p>
+
+        <div class="s4-evidence-grid">
+          <div class="s4-evidence-card" id="card-evidence-hal" onclick="scanPosterDefect('hal')">
+            <strong>📋 [단서 구역 A] 급식 관련 공약 문구</strong><br>
+            <small style="color: var(--text-muted);">"교육청 특별 예산 지원으로 매주 금요일 랍스터 무한 리필 & 우주 식량 제공!"</small>
+            <div id="hal-inspect-status" style="font-size: 0.8rem; margin-top: 6px; color: var(--neon-gold);">클릭하여 감식 스캔 ➔</div>
+          </div>
+
+          <div class="s4-evidence-card" id="card-evidence-law" onclick="scanPosterDefect('law')">
+            <strong>🖼️ [단서 구역 B] 홍보 이미지 및 캐릭터</strong><br>
+            <small style="color: var(--text-muted);">"친구가 울고 있는 엽기 표정 사진 합성 및 유명 애니메이션 캐릭터 로봇 도용"</small>
+            <div id="law-inspect-status" style="font-size: 0.8rem; margin-top: 6px; color: var(--neon-gold);">클릭하여 감식 스캔 ➔</div>
+          </div>
         </div>
-        <div class="evidence-tag" id="defect-law" onclick="resolveDefect('law')">
-          <strong>🔍 인증 사진 조사</strong><br>
-          <small>"친구 김민우의 엽기 사진 및 캐릭터를 허락 없이 합성 도용!"</small>
+
+        <!-- 감식 완료 후 활성화되는 수사관 생각 탐구 2문항 -->
+        <div id="stage4-inquiry-box" style="display: none; border-top: 1px dashed var(--border-color); padding-top: 10px; margin-top: 8px;">
+          <div class="eval-title" style="color: var(--neon-blue);">✍️ 탐구 문항 1: AI의 환각(할루시네이션)을 판별하기 위해 우리가 할 수 있는 것은 무엇일까요?</div>
+          <input type="text" id="stage4-inquiry-q1" class="input-box" placeholder="자신의 생각을 적어보세요." oninput="checkStage4Clearable()">
+
+          <div class="eval-title" style="color: var(--neon-gold); margin-top: 8px;">✍️ 탐구 문항 2: AI의 저작권 및 타인의 권리 존중을 위해 우리가 할 수 있는 것은 무엇일까요?</div>
+          <input type="text" id="stage4-inquiry-q2" class="input-box" placeholder="자신의 생각을 적어보세요." oninput="checkStage4Clearable()">
         </div>
+      </div>
+
+      <!-- 3. [게임] '진실 vs 환각' 팩트체크 레이더 -->
+      <div class="eval-box">
+        <div class="eval-title">🎮 활동 ② : '진실 vs 환각' 팩트체크 레이더 게임</div>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px;">
+          AI가 제시한 문장을 읽고 사실(진실)인지 거짓된 환각/침해인지 신속하게 판별하세요.
+        </p>
+
+        <div class="radar-box">
+          <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--neon-blue);">
+            <span>레이더 감지</span>
+            <span id="radar-progress">진행: 1 / 3</span>
+          </div>
+          <div class="radar-card-text" id="radar-card-content">문장 로딩 중...</div>
+          <div class="radar-controls">
+            <button type="button" class="btn" style="background: #2a9d8f; font-size: 0.85rem; padding: 8px 18px;" onclick="answerRadar('fact')">🟢 실제 진실 (FACT)</button>
+            <button type="button" class="btn" style="background: #e63946; font-size: 0.85rem; padding: 8px 18px;" onclick="answerRadar('hallucination')">🔴 거짓 환각 / 권리 침해</button>
+          </div>
+          <div id="radar-feedback" style="font-size: 0.82rem; min-height: 18px; margin-top: 8px;"></div>
+        </div>
+      </div>
+
+      <!-- 4. [퀴즈] AI 윤리 법정 최종 판결 퀴즈 -->
+      <div class="eval-box">
+        <div class="eval-title">⚖️ 활동 ③ : AI 윤리 법정 최종 판결 퀴즈</div>
+        
+        <div style="background: rgba(0,0,0,0.25); padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+          <div style="font-size: 0.85rem; font-weight: bold; color: var(--neon-gold); margin-bottom: 6px;">
+            Q1. AI가 생성한 통계나 정보를 학교 과제에 그대로 인용할 때 발생할 수 있는 가장 큰 문제는?
+          </div>
+          <label style="display:block; font-size:0.8rem; margin-bottom:4px; cursor:pointer;">
+            <input type="radio" name="s4-quiz1" value="A" onchange="checkStage4Clearable()"> 1) 컴퓨터의 인터넷 데이터 사용량이 급격히 늘어난다.
+          </label>
+          <label style="display:block; font-size:0.8rem; margin-bottom:4px; cursor:pointer;">
+            <input type="radio" name="s4-quiz1" value="B" onchange="checkStage4Clearable()"> 2) 그럴듯하지만 완전히 날조된 거짓 정보(환각)를 진짜로 믿게 될 수 있다.
+          </label>
+          <label style="display:block; font-size:0.8rem; cursor:pointer;">
+            <input type="radio" name="s4-quiz1" value="C" onchange="checkStage4Clearable()"> 3) AI가 화를 내며 더 이상 답변을 거부한다.
+          </label>
+        </div>
+
+        <div style="background: rgba(0,0,0,0.25); padding: 10px; border-radius: 8px;">
+          <div style="font-size: 0.85rem; font-weight: bold; color: var(--neon-blue); margin-bottom: 6px;">
+            Q2. AI 이미지 생성 도구를 활용할 때 지켜야 할 올바른 태도는?
+          </div>
+          <label style="display:block; font-size:0.8rem; margin-bottom:4px; cursor:pointer;">
+            <input type="radio" name="s4-quiz2" value="A" onchange="checkStage4Clearable()"> 1) 재미를 위해서라면 친구 얼굴을 허락 없이 합성해도 문제없다.
+          </label>
+          <label style="display:block; font-size:0.8rem; margin-bottom:4px; cursor:pointer;">
+            <input type="radio" name="s4-quiz2" value="B" onchange="checkStage4Clearable()"> 2) 타인의 얼굴이나 저작물을 활용할 때는 반드시 사전 동의와 저작권 규정을 확인해야 한다.
+          </label>
+          <label style="display:block; font-size:0.8rem; cursor:pointer;">
+            <input type="radio" name="s4-quiz2" value="C" onchange="checkStage4Clearable()"> 3) 유명한 캐릭터는 인터넷에 공개되어 있으므로 마음대로 상업적 홍보에 써도 된다.
+          </label>
+        </div>
+      </div>
+
+      <!-- 5. [배움정리] 수사관 최종 수사 결론 & 서명 -->
+      <div class="eval-box">
+        <div class="eval-title">📜 활동 ④ : [배움 정리] 수사관의 최종 수사 종결 보고서</div>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
+          나복사의 벽보 사건 수사를 마무리하며, AI 결과물을 세상에 공개하기 전 반드시 점검해야 할 핵심을 작성하세요.
+        </p>
+        <input type="text" id="stage4-final-summary" class="input-box" placeholder="예: AI가 내놓은 정보가 진짜인지 직접 팩트체크하고, 타인의 사진이나 권리를 침해하지 않았는지 반드시 확인해야 한다 등" oninput="checkStage4Clearable()">
       </div>
     </div>
-    <div style="text-align: right;">
-      <button class="btn" id="btn-stage4-next" disabled onclick="passStage4()">🔍 최종 코드 조각 확보 & 요원증 발급 ➔</button>
+
+    <div style="text-align: right; margin-top: 15px;">
+      <button class="btn" id="btn-stage4-next" disabled onclick="passStage4()">🔍 최종 단서 '!' 확보 & 요원증 발급 ➔</button>
     </div>
   </div>
 
@@ -583,7 +660,7 @@
         • <strong>수사 관리 번호:</strong> #2026-AI-6GRADE<br>
         • <strong>초기 의심 소견:</strong> <span id="cert-agent-opinion" style="color: #85e89d;"></span><br>
         • <strong>단서 암호 해제:</strong> <span style="color: var(--neon-gold); font-weight: bold;">F - A - C - T - !</span> (완전 규명)<br>
-        • <strong>판정 내용:</strong> 위 수사관은 AI의 3단계 작동 원리를 규명하고 4대 결함(과의존, 편향성, 환각, 권리 침해)을 밝혀내었으므로 '공식 FACT 요원' 자격을 부여함.
+        • <strong>판정 내용:</strong> 위 수사관은 AI의 작동 원리를 규명하고 4대 결함(과의존, 편향성, 환각, 권리 침해)을 밝혀내었으므로 '공식 FACT 요원' 자격을 부여함.
       </div>
       <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">📸 요원증 화면을 캡처하여 학급 제출 창구(패들렛)에 제출하세요!</p>
       <button class="btn" onclick="window.print()">🖨️ 요원증 인쇄 / PDF 저장</button>
@@ -645,7 +722,7 @@
       showStage('stage-1');
     }
 
-    /* Stage 1 : Simulator */
+    /* Stage 1 */
     let selectedChips = [];
 
     function toggleDataChip(el, type) {
@@ -728,7 +805,6 @@
       checkStage1Clearable();
     }
 
-    /* Stage 1 : Pipeline */
     let pipelineChoices = [];
     const correctPipeline = ["인터넷 데이터 수집", "규칙/확률 학습", "새로운 글·그림 생성"];
     let isPipelineCorrect = false;
@@ -791,7 +867,7 @@
       showStage('stage-2');
     }
 
-    /* Stage 2 : Ethics Simulator & Pledges */
+    /* Stage 2 */
     function genLazyPrompt() {
       const box = document.getElementById('lazy-prompt-output');
       box.innerHTML = `
@@ -872,7 +948,7 @@
       showStage('stage-3');
     }
 
-    /* Stage 3 : Bias Logic */
+    /* Stage 3 */
     function scanBiasData() {
       document.getElementById('bias-scan-result').style.display = 'block';
     }
@@ -951,27 +1027,93 @@
 
     function passStage3() {
       unlockBadge('badge-T', 'T');
+      initStage4();
       showStage('stage-4');
     }
 
-    /* Stage 4 : Hallucination & Rights */
-    let defects = { hal: false, law: false };
+    /* Stage 4 : Hallucination & Rights Logic */
+    let s4Defects = { hal: false, law: false };
 
-    function resolveDefect(type) {
-      if (type === 'hal' && !defects.hal) {
-        defects.hal = true;
-        const target = document.getElementById('defect-hal');
-        target.classList.add('checked');
-        target.innerHTML = "<strong>✅ [환각 적발]</strong><br><small>학교 예산상 불가능한 거짓 정보 확인 완료!</small>";
+    function scanPosterDefect(type) {
+      if (type === 'hal' && !s4Defects.hal) {
+        s4Defects.hal = true;
+        const card = document.getElementById('card-evidence-hal');
+        card.classList.add('scanned');
+        document.getElementById('hal-inspect-status').innerHTML = "🚨 <strong>[감식 완료]</strong> 학교 예산상 불가능한 거짓 정보";
       }
-      if (type === 'law' && !defects.law) {
-        defects.law = true;
-        const target = document.getElementById('defect-law');
-        target.classList.add('checked');
-        target.innerHTML = "<strong>✅ [권리 침해 적발]</strong><br><small>초상권 무단 침해 확인 완료!</small>";
+      if (type === 'law' && !s4Defects.law) {
+        s4Defects.law = true;
+        const card = document.getElementById('card-evidence-law');
+        card.classList.add('scanned');
+        document.getElementById('law-inspect-status').innerHTML = "🚨 <strong>[감식 완료]</strong> 동의 없는 친구 사진 및 캐릭터 도용";
       }
-      if (defects.hal && defects.law) {
-        document.getElementById('btn-stage4-next').disabled = false;
+
+      if (s4Defects.hal && s4Defects.law) {
+        document.getElementById('stage4-inquiry-box').style.display = 'block';
+      }
+      checkStage4Clearable();
+    }
+
+    /* Radar Mini Game */
+    const radarQuestions = [
+      { text: '"조선왕조실록에 세종대왕이 맥북프로를 던진 사건이 기록되어 있다."', ans: 'hallucination' },
+      { text: '"생성형 AI는 모르는 내용도 단어 확률에 따라 그럴듯한 거짓말로 꾸며낼 수 있다."', ans: 'fact' },
+      { text: '"친구의 엽기 사진을 허락 없이 AI로 재미있게 합성해 단체방에 올리는 것은 장난이므로 괜찮다."', ans: 'hallucination' }
+    ];
+    let currentRadarIdx = 0;
+    let isRadarCompleted = false;
+
+    function initStage4() {
+      currentRadarIdx = 0;
+      isRadarCompleted = false;
+      updateRadarUI();
+    }
+
+    function updateRadarUI() {
+      if (currentRadarIdx < radarQuestions.length) {
+        document.getElementById('radar-progress').innerText = `진행: ${currentRadarIdx + 1} / ${radarQuestions.length}`;
+        document.getElementById('radar-card-content').innerText = radarQuestions[currentRadarIdx].text;
+      } else {
+        isRadarCompleted = true;
+        document.getElementById('radar-progress').innerText = `진행 완료! (3 / 3)`;
+        document.getElementById('radar-card-content').innerHTML = `<span style="color:#85e89d;">✅ 레이더 감식 완료! 진실과 거짓, 권리 침해를 정확히 구별했습니다.</span>`;
+        document.getElementById('radar-feedback').innerText = "";
+        checkStage4Clearable();
+      }
+    }
+
+    function answerRadar(choice) {
+      if (isRadarCompleted) return;
+      if (radarQuestions[currentRadarIdx].ans === choice) {
+        document.getElementById('radar-feedback').innerHTML = `<span style="color:#85e89d;">정확한 판별입니다! 다음 문장 분석 중...</span>`;
+        currentRadarIdx++;
+        setTimeout(() => {
+          document.getElementById('radar-feedback').innerText = "";
+          updateRadarUI();
+        }, 500);
+      } else {
+        document.getElementById('radar-feedback').innerHTML = `<span style="color:#ff6b6b;">판별 오류! 사실 여부와 권리 침해 여부를 다시 고민해 보세요.</span>`;
+      }
+    }
+
+    /* Stage 4 Clear Check */
+    function checkStage4Clearable() {
+      const q1Val = document.getElementById('stage4-inquiry-q1').value.trim();
+      const q2Val = document.getElementById('stage4-inquiry-q2').value.trim();
+      const quiz1 = document.querySelector('input[name="s4-quiz1"]:checked');
+      const quiz2 = document.querySelector('input[name="s4-quiz2"]:checked');
+      const summary = document.getElementById('stage4-final-summary').value.trim();
+      const nextBtn = document.getElementById('btn-stage4-next');
+
+      const isEvidenceDone = s4Defects.hal && s4Defects.law;
+      const isInquiryDone = q1Val.length >= 3 && q2Val.length >= 3;
+      const isQuizDone = (quiz1 && quiz1.value === 'B') && (quiz2 && quiz2.value === 'B');
+      const isSummaryDone = summary.length >= 5;
+
+      if (isEvidenceDone && isInquiryDone && isRadarCompleted && isQuizDone && isSummaryDone) {
+        nextBtn.disabled = false;
+      } else {
+        nextBtn.disabled = true;
       }
     }
 
