@@ -75,7 +75,7 @@
       transform: scale(1.12); 
     }
 
-    /* Stage Container : 시원한 크기와 넉넉한 세로 스크롤 레이아웃 */
+    /* Stage Container */
     .stage-container { 
       width: 100%; 
       max-width: 1000px; 
@@ -181,13 +181,16 @@
     .btn-action:hover { box-shadow: 0 0 25px var(--neon-blue); transform: translateY(-2px); }
     .btn-action:disabled { background: #334155; color: #64748b; cursor: not-allowed; box-shadow: none; transform: none; }
 
-    /* Stage 1: 데이터 칩 & 바구니 */
+    /* Stage 1: 데이터 칩 & 바구니 & 확률 그래프 */
     .data-cards-pool { display: flex; flex-wrap: wrap; gap: 12px; margin: 14px 0 18px; }
     .data-chip { background: #1e293b; border: 2px solid #3b82f6; border-radius: 30px; padding: 12px 22px; font-size: 1.1rem; font-weight: 700; cursor: pointer; user-select: none; transition: 0.2s; }
     .data-chip:hover { border-color: var(--neon-blue); transform: translateY(-2px); }
     .data-chip.selected { background: #0284c7; border-color: var(--neon-blue); color: #fff; box-shadow: 0 0 12px rgba(0, 210, 255, 0.6); }
     
     .drop-basket { min-height: 70px; border: 2.5px dashed var(--neon-blue); border-radius: 14px; padding: 14px; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px; background: rgba(0, 210, 255, 0.05); margin-bottom: 15px; }
+
+    .prob-bar-track { background: #0b152d; border-radius: 8px; height: 22px; width: 100%; overflow: hidden; margin: 8px 0 12px; display: flex; border: 1px solid rgba(0,210,255,0.2); }
+    .prob-bar-fill { height: 100%; transition: width 0.5s ease; }
 
     .puzzle-grid { display: flex; gap: 15px; margin: 18px 0; justify-content: center; flex-wrap: wrap; }
     .puzzle-card { padding: 16px 26px; background: var(--card-bg); border: 2px solid var(--border-color); border-radius: 12px; cursor: pointer; font-weight: 800; font-size: 1.15rem; transition: 0.2s; user-select: none; }
@@ -285,7 +288,7 @@
     <button class="btn-action" onclick="startInvestigation()">사건 현장 긴급 출동 ➔</button>
   </div>
 
-  <!-- Stage 1: AI 원리 (체험 1회 + 3단계 퍼즐로 즉시 통과) -->
+  <!-- Stage 1: AI 원리 (5개 선택지 복원 & 데이터 입력->학습->생성 연결) -->
   <div class="stage-container" id="stage-1">
     <div class="visual-frame">
       <img src="images/stage1_pipeline.png" alt="원리 분석" onclick="openModal(this.src)">
@@ -293,38 +296,58 @@
 
     <div class="dialogue-box">
       <div class="dialogue-speaker speaker-alpi">🤖 AI 매니저 알피</div>
-      <div class="dialogue-text">"저는 인터넷 데이터를 모아서 가장 어울릴 것 같은 단어를 확률로 이어붙였을 뿐입니다!"</div>
+      <div class="dialogue-text">"저는 스스로 생각하는 두뇌가 없습니다! 인터넷에서 수집한 데이터 속에서 단어들이 함께 나올 확률을 학습한 뒤, 새로운 문장을 조합하여 생성할 뿐입니다."</div>
     </div>
 
+    <!-- 1단계: 데이터 수집/입력 -->
     <div class="eval-box">
-      <div class="eval-title">🧪 [실험] 알피의 두뇌에 학습 데이터 2개를 먹여보세요</div>
-      <p class="eval-desc">카드를 클릭하여 바구니를 채운 후 공약을 생성해 보세요.</p>
+      <div class="eval-title">🧪 1단계 [데이터 입력] : 알피에게 먹일 인터넷 학습 데이터 2개를 고르세요</div>
+      <p class="eval-desc">인터넷 데이터 카드 5개 중 원하는 2개를 클릭하여 학습 바구니에 담아보세요.</p>
       
-      <div class="data-cards-pool">
-        <div class="data-chip" onclick="toggleDataChip(this, 'lobster')">🦞 [맛집] "랍스터 버터구이 무한 리필"</div>
-        <div class="data-chip" onclick="toggleDataChip(this, 'space')">🚀 [SF 영화] "우주 식량 디저트 캡슐"</div>
-        <div class="data-chip" onclick="toggleDataChip(this, 'nutrition')">🥗 [학교 식단표] "영양 밸런스 친환경 급식"</div>
+      <div class="data-cards-pool" id="data-pool">
+        <div class="data-chip" onclick="toggleDataChip(this, 'lobster')">🦞 [맛집 블로그] "랍스터 버터구이 무한 리필 꿀팁"</div>
+        <div class="data-chip" onclick="toggleDataChip(this, 'space')">🚀 [SF 영화 후기] "탐사선 우주 식량 캡슐 디저트"</div>
+        <div class="data-chip" onclick="toggleDataChip(this, 'game')">🎮 [게임 커뮤니티] "점심시간 E-스포츠 경기 개최"</div>
+        <div class="data-chip" onclick="toggleDataChip(this, 'nutrition')">🥗 [학교 식단 가이드] "친환경 잡곡밥 & 영양 밸런스 식단"</div>
+        <div class="data-chip" onclick="toggleDataChip(this, 'clean')">🧹 [생활 교육 지침] "급식 후 1인 1구역 깨끗한 분리배출"</div>
       </div>
 
       <div class="drop-basket" id="data-basket">
-        <span style="color: var(--text-muted); font-size: 1.1rem;">위 카드를 클릭하여 2개를 담으세요.</span>
+        <span style="color: var(--text-muted); font-size: 1.1rem;">위 카드를 클릭하여 2개를 채우세요 (2개 선택 필수).</span>
       </div>
 
-      <button type="button" class="btn-action" style="padding: 14px; font-size: 1.1rem;" onclick="runAiSim()">⚙️ AI 단어 조합 확률 계산하기</button>
+      <div style="display:flex; gap:12px;">
+        <button type="button" class="btn-action" style="padding: 16px; font-size: 1.15rem; flex: 3;" onclick="runAiSim()">⚙️ 2단계: AI 확률 학습 및 단어 연결 실행</button>
+        <button type="button" class="btn-action" style="padding: 16px; font-size: 1.15rem; flex: 1; background:#334155; color:#fff;" onclick="resetSimData()">🔄 초기화</button>
+      </div>
       
-      <div id="sim-result-box" style="display:none; margin-top: 14px; background: #081024; padding: 16px; border-radius: 12px; border-left: 4px solid var(--neon-gold); font-size: 1.15rem;"></div>
+      <!-- 2단계: 학습/확률 계산 결과 및 3단계: 생성 공약 표시 -->
+      <div id="sim-result-box" style="display:none; margin-top: 18px; background: #081024; padding: 22px; border-radius: 14px; border: 1.5px solid var(--neon-gold);">
+        <div style="font-size: 1.15rem; color: var(--neon-gold); font-weight: bold; margin-bottom: 10px;">
+          📊 2단계 [규칙/확률 학습] : 알피가 계산한 단어 연결 통계
+        </div>
+        <div id="prob-bars-container"></div>
+        
+        <div style="font-size: 1.15rem; color: var(--neon-blue); font-weight: bold; margin: 15px 0 8px;">
+          🤖 3단계 [새로운 글 생성] : 최종 완성된 공약 문장
+        </div>
+        <div id="sim-generated-text" style="background: rgba(0, 210, 255, 0.1); border-left: 4px solid var(--neon-blue); padding: 14px 18px; border-radius: 8px; font-size: 1.2rem; line-height: 1.6; font-weight: 700; color: #fff;"></div>
+      </div>
     </div>
 
+    <!-- 원리 체계화 3단계 퍼즐 -->
     <div class="eval-box">
-      <div class="eval-title">🧩 AI가 작동하는 3단계 순서를 클릭하여 완성하세요</div>
-      <div class="puzzle-slot-display" id="pipeline-result">순서대로 클릭하세요</div>
+      <div class="eval-title">🧩 방금 경험한 AI 작동 원리 3단계를 순서대로 클릭하여 완성하세요</div>
+      <p class="eval-desc">방금 알피에게 데이터를 주고, 확률을 계산하고, 문장이 나오는 과정을 순서대로 맞추세요.</p>
+      
+      <div class="puzzle-slot-display" id="pipeline-result">클릭하여 순서대로 배치하세요</div>
       <div class="puzzle-grid">
-        <div class="puzzle-card" onclick="choosePipeline('규칙/확률 학습')">규칙/확률 학습</div>
-        <div class="puzzle-card" onclick="choosePipeline('새로운 글·그림 생성')">새로운 글·그림 생성</div>
-        <div class="puzzle-card" onclick="choosePipeline('인터넷 데이터 수집')">인터넷 데이터 수집</div>
+        <div class="puzzle-card" onclick="choosePipeline('규칙/확률 학습')">② 규칙/확률 학습</div>
+        <div class="puzzle-card" onclick="choosePipeline('새로운 글·그림 생성')">③ 새로운 글·그림 생성</div>
+        <div class="puzzle-card" onclick="choosePipeline('인터넷 데이터 수집')">① 인터넷 데이터 수집</div>
       </div>
       <div style="text-align: center;">
-        <button type="button" style="background:none; border:none; color:var(--text-muted); font-size: 1rem; cursor:pointer; text-decoration:underline;" onclick="resetPipeline()">다시 선택하기</button>
+        <button type="button" style="background:none; border:none; color:var(--text-muted); font-size: 1rem; cursor:pointer; text-decoration:underline;" onclick="resetPipeline()">퍼즐 다시 선택하기</button>
       </div>
     </div>
 
@@ -535,15 +558,23 @@
       showStage('stage-1');
     }
 
-    /* Stage 1 */
+    /* Stage 1: 복원된 5종 칩 관리 및 조합 생성 로직 */
     let selectedChips = [];
+    const chipLabels = {
+      lobster: '🦞 랍스터 맛집',
+      space: '🚀 우주 식량 리뷰',
+      game: '🎮 E-스포츠 커뮤니티',
+      nutrition: '🥗 학교 영양 식단표',
+      clean: '🧹 교실 분리배출 지침'
+    };
+
     function toggleDataChip(el, type) {
       if (selectedChips.includes(type)) {
         selectedChips = selectedChips.filter(i => i !== type);
         el.classList.remove('selected');
       } else {
         if (selectedChips.length >= 2) {
-          alert("데이터는 2개만 선택하세요!");
+          alert("학습 데이터는 2개만 선택해 주세요! (다른 카드를 해제 후 선택)");
           return;
         }
         selectedChips.push(type);
@@ -555,20 +586,65 @@
     function updateBasket() {
       const basket = document.getElementById('data-basket');
       if (selectedChips.length === 0) {
-        basket.innerHTML = '<span style="color: var(--text-muted); font-size: 1.1rem;">위 카드를 클릭하여 2개를 담으세요.</span>';
+        basket.innerHTML = '<span style="color: var(--text-muted); font-size: 1.1rem;">위 카드를 클릭하여 2개를 채우세요 (2개 선택 필수).</span>';
       } else {
-        basket.innerHTML = selectedChips.map(c => `<span class="data-chip selected" style="cursor:default;">${c}</span>`).join('');
+        basket.innerHTML = selectedChips.map(c => `<span class="data-chip selected" style="cursor:default;">${chipLabels[c]}</span>`).join('');
       }
+    }
+
+    function resetSimData() {
+      selectedChips = [];
+      document.querySelectorAll('.data-chip').forEach(el => el.classList.remove('selected'));
+      updateBasket();
+      document.getElementById('sim-result-box').style.display = 'none';
     }
 
     function runAiSim() {
       if (selectedChips.length < 2) {
-        alert("데이터를 2개 선택해 주세요!");
+        alert("학습시킬 데이터를 2개 골라주세요!");
         return;
       }
-      const box = document.getElementById('sim-result-box');
-      box.style.display = 'block';
-      box.innerHTML = `🤖 <strong>알피의 확률 생성 결과:</strong> "입력된 데이터 단어들의 결합 확률을 계산하여 새로운 공약 문장을 도출했습니다!"`;
+
+      const resultBox = document.getElementById('sim-result-box');
+      const barsContainer = document.getElementById('prob-bars-container');
+      const genText = document.getElementById('sim-generated-text');
+      resultBox.style.display = 'block';
+
+      // 확률 가중치 계산 (선택된 데이터 반영)
+      let probLobster = selectedChips.includes('lobster') ? 85 : 8;
+      let probNutrition = selectedChips.includes('nutrition') ? 80 : 12;
+      let probSpace = selectedChips.includes('space') ? 78 : 6;
+      let probGame = selectedChips.includes('game') ? 82 : 10;
+      let probClean = selectedChips.includes('clean') ? 86 : 9;
+
+      barsContainer.innerHTML = `
+        <div style="font-size:1.05rem; margin-top:6px; color:#cbd5e1;">• "급식" 다음 올 단어 확률: 🦞 랍스터 (${probLobster}%) / 🥗 영양 식단 (${probNutrition}%)</div>
+        <div class="prob-bar-track">
+          <div class="prob-bar-fill" style="width: ${probLobster}%; background: var(--neon-red);"></div>
+          <div class="prob-bar-fill" style="width: ${probNutrition}%; background: var(--neon-green);"></div>
+        </div>
+        <div style="font-size:1.05rem; margin-top:4px; color:#cbd5e1;">• "활동/디저트" 연결 확률: 🚀 우주식량 (${probSpace}%) / 🎮 E-스포츠 (${probGame}%) / 🧹 분리배출 (${probClean}%)</div>
+        <div class="prob-bar-track">
+          <div class="prob-bar-fill" style="width: ${probSpace}%; background: var(--neon-gold);"></div>
+          <div class="prob-bar-fill" style="width: ${probGame}%; background: var(--neon-blue);"></div>
+          <div class="prob-bar-fill" style="width: ${probClean}%; background: #a855f7;"></div>
+        </div>
+      `;
+
+      // 선택 조합에 따른 AI 문장 도출 (3단계: 생성)
+      if (selectedChips.includes('lobster') && selectedChips.includes('space')) {
+        genText.innerHTML = `📢 "매주 금요일 급식에 [랍스터 무한 리필]과 [우주 식량 디저트 캡슐]을 전교생에게 제공하겠습니다!"<br><span style="color:var(--neon-gold); font-size:1rem; font-weight:normal;">(사건 속 나복사의 황당 공약이 그대로 재현되었습니다!)</span>`;
+      } else if (selectedChips.includes('lobster') && selectedChips.includes('game')) {
+        genText.innerHTML = `📢 "점심시간마다 [랍스터 버터구이]를 먹으며 [전교생 E-스포츠 게임 대회]를 개최하겠습니다!"`;
+      } else if (selectedChips.includes('nutrition') && selectedChips.includes('clean')) {
+        genText.innerHTML = `📢 "영양 기준을 준수한 [친환경 잡곡 식단]을 운영하고, 식사 후 [깨끗한 분리배출 챌린지]를 실천하겠습니다!"`;
+      } else if (selectedChips.includes('game') && selectedChips.includes('clean')) {
+        genText.innerHTML = `📢 "점심시간 [E-스포츠 리그] 참여 학생들과 함께 [체육관 클린 분리배출 봉사단]을 운영하겠습니다!"`;
+      } else if (selectedChips.includes('space') && selectedChips.includes('nutrition')) {
+        genText.innerHTML = `📢 "영양 가득한 [친환경 급식 식단]에 미래 과학 체험용 [우주 식량 간식]을 깜짝 제공하겠습니다!"`;
+      } else {
+        genText.innerHTML = `📢 "입력된 ${chipLabels[selectedChips[0]]}와 ${chipLabels[selectedChips[1]]} 데이터의 최고 확률 단어를 결합해 새로운 공약 문장을 생성했습니다!"`;
+      }
     }
 
     let pipelineChoices = [];
@@ -585,7 +661,7 @@
           display.innerHTML = `<span style="color:#22c55e;">✅ 완벽합니다! (${display.innerText})</span>`;
           document.getElementById('btn-stage1-next').disabled = false;
         } else {
-          display.innerHTML = `<span style="color:#ef4444;">❌ 순서가 틀렸습니다. 다시 선택해 보세요!</span>`;
+          display.innerHTML = `<span style="color:#ef4444;">❌ 순서가 틀렸습니다. AI는 먼저 데이터를 수집해야 작동합니다!</span>`;
         }
       }
     }
